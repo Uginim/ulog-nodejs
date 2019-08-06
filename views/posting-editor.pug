@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    form#post-form(action='/write/post' method='post')
+        div.post-title 
+            label(for='post-title')
+            input.post-title.editor(type=text name='title')
+        .post-content
+            label(for='post-content')
+            textarea.post-content.editor(type=textarea name='content')
+        button#post-btn.btn(type='submit') POST

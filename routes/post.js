@@ -10,8 +10,8 @@ router.get('/', async (req, res) => {
         title: 'Blog Title'
     });
 })
-router.post('/write/post', (req, res) => {
-    console.log(req.body);
+router.post('/write/post', (req, res, next) => {
+    
     Post.create({
         content: req.body.content,
         title: req.body.title,

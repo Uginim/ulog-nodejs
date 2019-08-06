@@ -1,22 +1,24 @@
-const Sequelize = require('sequelize');
-const Model = Sequelize.Model;
-class Post extends Model {}
-module.exports = (sequelize, DataTypes) => (
+module.exports = (sequelize, DataTypes) => {
+    console.log('in the post model');
+    class Post extends DataTypes.Model {};
     Post.init({
         title: {
-            type:Sequelize.STRING(200),
+            type:DataTypes.STRING(200),
             allowNull: false,
         },    
         content: {
-            type:Sequelize.TEXT,
+            type:DataTypes.TEXT,
             allowNull: true,
         }
-    },{    
+    },{ 
+        sequelize,
+        modelName:'post',   
         timestamps: true,
         paranoid: true,
         charset: 'utf8',
         collate: 'utf8_general_ci',
-    })
-);
+    });
+    return Post;
+};
 
 

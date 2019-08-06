@@ -1,4 +1,5 @@
 const express = require('express');
+const { sequelize } = require('./models');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const path = require('path');
@@ -7,6 +8,11 @@ const postRouter = require('./routes/post');
 
 
 const app = express();
+sequelize.sync();
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+app.set('port', process.env.PORT || 8001);
 
 if (process.env.NODE_ENV === 'production') {
     app.use(morgan('combined'));
@@ -15,11 +21,10 @@ if (process.env.NODE_ENV === 'production') {
 } else {
     app.use(morgan('dev'));
 }
-
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-app.set('port', process.env.PORT || 8001);
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());// 이게 있어야 req.body를 쓸 수 있음
+app.use(express.urlencoded({ extended: false }));
+
 app.engine('pug', require('pug').__express)
 
 

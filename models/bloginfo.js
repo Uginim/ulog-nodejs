@@ -4,11 +4,11 @@ class Bloginfo extends Model {};
 module.exports = (sequelize, DataTypes) => (
     Bloginfo.init({
         name: {
-            type:Sequelize.STRING(200),
+            type:DataTypes.STRING(200),
             allowNull: false,
         },    
         content: {
-            type:Sequelize.TEXT,
+            type:DataTypes.TEXT,
             allowNull: true,
         }
     },{    

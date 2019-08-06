@@ -9,8 +9,8 @@ const sequelize = new Sequelize(
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-db.Post = require('./post');
-db.Bloginfo = require('./bloginfo');
+db.Post = require('./post')(sequelize, Sequelize);
+// db.Bloginfo = require('./bloginfo');
 
 
 module.exports=db;

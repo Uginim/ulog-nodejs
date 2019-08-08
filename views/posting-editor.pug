@@ -7,5 +7,10 @@ block content
             input.post-title.editor(type=text name='title')
         .post-content
             label(for='post-content')
-            textarea.post-content.editor(type=textarea name='content')
+            textarea.post-content.editor(name='content')
         button#post-btn.btn(type='submit') POST
+    script(type="text/javascript" src="http://lab.lepture.com/editor/editor.js")
+    script(type="text/javascript" src="http://lab.lepture.com/editor/marked.js")
+    script.
+        var editor = new Editor();
+        editor.render();

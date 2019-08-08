@@ -3,4 +3,6 @@ extends layout
 block content
     ul
         each post in posts
-            li= post.title
+            a(href=`./post/${post.id}`)
+                li= post.title
+            

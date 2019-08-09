@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const path = require('path');
 const logger = require('./logger');
+const pageRouter = require('./routes/page');
 const postRouter = require('./routes/post');
 
 
@@ -27,8 +28,8 @@ app.use(express.urlencoded({ extended: false }));
 
 app.engine('pug', require('pug').__express)
 
-
-app.use(postRouter);
+app.use('/',pageRouter);
+app.use('/post', postRouter);
 
 app.use((req, res, next) => {
     const err = new Error('Not Found');

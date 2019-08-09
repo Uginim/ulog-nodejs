@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
         posts: posts,
     });
 });
-router.get('/post/:id', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
     const post = await Post.findOne({where:{id:req.params.id}});
     
     res.render('post-page',{
@@ -21,7 +21,7 @@ router.get('/post/:id', async (req, res, next) => {
         content: post.content,
     });
 });
-router.post('/write/post', (req, res, next) => {
+router.post('/write/', (req, res, next) => {
     
     Post.create({
         content: req.body.content,
@@ -29,7 +29,7 @@ router.post('/write/post', (req, res, next) => {
     });
     res.redirect('/');
 });
-router.get('/posting', (req, res) => {
+router.get('/', (req, res) => {
     res.render('posting-editor',{
         title:''
     });

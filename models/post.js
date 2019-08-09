@@ -1,5 +1,4 @@
 module.exports = (sequelize, DataTypes) => {
-    console.log('in the post model');
     class Post extends DataTypes.Model {};
     Post.init({
         title: {

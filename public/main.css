@@ -1,7 +1,6 @@
-input.post-title.editor {
-    width: 400px;    
-}
-textarea.post-content.editor{
-    
-    height: 500px;
+.form-signin {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
 }

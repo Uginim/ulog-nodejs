@@ -11,5 +11,9 @@ router.get('/',async (req, res, next) => {
         posts: posts,
     });
 });
-
+router.get('/signin', (req, res, next) => {
+    res. render('signin', {
+        title: '',
+    })
+})
 module.exports = router;

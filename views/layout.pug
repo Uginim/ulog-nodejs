@@ -9,7 +9,21 @@ html
         link(rel="stylesheet" href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous')
         link(rel="stylesheet" href="http://lab.lepture.com/editor/editor.css")
         link(rel='stylesheet' href='/main.css')
-        
+        style.
+            .bd-placeholder-img {
+                font-size: 1.125rem;
+                text-anchor: middle;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+            @media (min-width: 768px) {
+                .bd-placeholder-img-lg {
+                    font-size: 3.5rem;
+                }
+            }
         
     body
         .container
@@ -28,21 +42,14 @@ html
                                 circle(cx='10.5' cy='10.5' r='7.5')
                                 path(d="M21 21l-5.2-5.2")
                         a(class='btn btn-sm btn-outline-secondary' href='/signin') Sign in
-                        a(class='btn btn-sm btn-outline-secondary' href='') Sign up
+                        a(class='btn btn-sm btn-outline-secondary' href='/signuppage') Sign up
             div(class='nav-scroller py-1 mb-2')
                 nav(class='nav d-flex justify-content-between')
-                    a(class='p-2 text-muted' href='#') World
-                    a(class='p-2 text-muted' href='#') U.S
-                    a(class='p-2 text-muted' href='#') Technology
-                    a(class='p-2 text-muted' href='#') Design
-                    a(class='p-2 text-muted' href='#') Culture
-                    a(class='p-2 text-muted' href='#') Business
-                    a(class='p-2 text-muted' href='#') Politics
-                    a(class='p-2 text-muted' href='#') Opinion
-                    a(class='p-2 text-muted' href='#') Science
-                    a(class='p-2 text-muted' href='#') Health
-                    a(class='p-2 text-muted' href='#') Style
-                    a(class='p-2 text-muted' href='#') Travel
+                    a(class='p-2 text-muted' href='#') Prologue 
+                    a(class='p-2 text-muted' href='#') Postings
+                    a(class='p-2 text-muted' href='#') Review
+                    a(class='p-2 text-muted' href='#') Tags
+                    a(class='p-2 text-muted' href='#') About me
             block content     
         footer
 

@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    form(class='form-signup' action='/auth/join' method='post')
+        h1(class='h3 mb-3 font-weight-normal') Sign up
+        .input-group
+            label(class='sr-only' for='inputEmail') Email address
+            input#inputEmail(class='form-control' type='email' name='email')
+        .input-group
+            label(class='sr-only' for='inputUsername') username
+            input#inputUsername(class='form-control' type='text' name='username')
+        .input-group
+            label(class='sr-only' for='inputPassword') password
+            input#inputPassword(class='form-control' type='password' name='password')
+        if joinError
+            .error-message=joinError            
+        button#join-btn.btn(class='btn btn-lg btn-primary btn-block' type='submit') Sign up

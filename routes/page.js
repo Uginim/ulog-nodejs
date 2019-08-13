@@ -13,6 +13,12 @@ router.get('/',async (req, res, next) => {
 });
 router.get('/signin', (req, res, next) => {
     res. render('signin', {
+        title: 'Sign in',
+    })
+})
+
+router.get('/signuppage', (req, res, next) => {
+    res. render('signup', {
         title: '',
     })
 })

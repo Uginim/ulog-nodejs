@@ -34,7 +34,7 @@ router.get('/signin', (req, res, next) => {
 
 router.get('/signuppage', (req, res, next) => {
     res. render('signup', {
-        title: '',
+        title: 'Sign up ',
     })
 })
 module.exports = router;

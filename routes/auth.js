@@ -1,5 +1,4 @@
 const express = require('express');
-const passport = require('passport');
 const bcrypt = require('bcrypt');
 const { isLoggedIn, isNotLoggedIn, login, logout } = require('./middlewares');
 const { User } = require('../models');
@@ -7,7 +6,8 @@ const { User } = require('../models');
 const router = express.Router();
 
 router.post('/join', isNotLoggedIn, async (req, res, next) =>{
-    const { email, nick, password } = req.body;
+    console.log(req.body);
+    const { email, username, password } = req.body;
     try {
         const existingUser = await User.findOne({ where: { email }});
         if( existingUser ) {
@@ -17,7 +17,7 @@ router.post('/join', isNotLoggedIn, async (req, res, next) =>{
         const hash = await bcrypt.hash(password, 12);
         await User.create({
             email,
-            nickname,
+            username,
             password: hash,
         });
         return res.redirect('/');
@@ -29,3 +29,6 @@ router.post('/join', isNotLoggedIn, async (req, res, next) =>{
 
 router.post('/login',isNotLoggedIn,login);
 router.post('/logout',isLoggedIn,logout);
+
+
+module.exports = router;

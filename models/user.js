@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     },{ 
         sequelize,
-        modelName:'post',   
+        modelName:'user',   
         timestamps: true,
         paranoid: true,
         charset: 'utf8',

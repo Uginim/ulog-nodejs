@@ -9,14 +9,15 @@ module.exports = (passport) => {
         passwordField: 'password',
     }, async (email, password, done) => {
         try {
-            const user = await User.findOne({ 
+            let user = await User.findOne({ 
                 where: { email }, 
-            });
+            });            
             if (user) {
-                const result = await bcrypt.compare(password, exUser.password);
-                if (result) {
-                    done(null, exUser);
+                const result = await bcrypt.compare(password, user.password);
+                if (result) {                    
+                    done(null, user);
                 } else {
+                    console.log('incorrect password');
                     done(null, false, { message: 'incorrect password.' });
                 }
             } else {

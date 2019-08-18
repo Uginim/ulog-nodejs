@@ -2,10 +2,13 @@ extends layout
 
 block content
     form#post-form(action='/write/post' method='post')
-        div.post-title 
+        .input-title 
             label(for='post-title')
             input.post-title.editor(type=text name='title')
-        .post-content
+        .input-content
+            label(for='post-tags')
+            input.post-title.editor(type=text name='tags')
+        .input-content
             label(for='post-content')
             textarea.post-content.editor(name='content')
         button#post-btn.btn(type='submit') POST

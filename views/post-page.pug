@@ -3,9 +3,16 @@ extends layout
 block content   
     #title=`${title}`
     #content=`${content}`
+    if(user)
+        form(class='form-comment')
+            .input-content
+                label(for='comment')
+                textarea(class='comment' name='comment')
+            button(class='btn btn-lg btn-primary btn-block' type='submit') comment
     script(src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js")
     script.
         var converter = new showdown.Converter();
         var content = document.getElementById('content');
         content.innerHTML = converter.makeHtml(content.innerHTML);
+        
     

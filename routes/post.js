@@ -11,6 +11,7 @@ router.get('/', async (req, res) => {
     res.render('post', {
         title: 'Blog Title',
         posts: posts,
+        user: req.user,
     });
 });
 router.get('/:id', async (req, res, next) => {
@@ -19,6 +20,7 @@ router.get('/:id', async (req, res, next) => {
     res.render('post-page',{
         title: post.title,
         content: post.content,
+        user: req.user,
     });
 });
 router.post('/write/', (req, res, next) => {
@@ -31,7 +33,8 @@ router.post('/write/', (req, res, next) => {
 });
 router.get('/', (req, res) => {
     res.render('posting-editor',{
-        title:''
+        title:'',
+        user: req.user,
     });
     
 });

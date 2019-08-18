@@ -9,6 +9,7 @@ router.get('/',async (req, res, next) => {
     res.render('post', {
         title: 'Blog Title',
         posts: posts,
+        user: req.user,
     });
 });
 
@@ -23,6 +24,7 @@ router.get('/alltags', async (req, res, next) => {
     res.render('alltags.pug',{
         title: 'Tag list',
         tags: tags,
+        user: req.user,
     })
 })
 

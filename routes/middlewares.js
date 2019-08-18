@@ -1,6 +1,7 @@
 const passport = require('passport');
 
 exports.isLoggedIn = (req, res, next) => {
+    console.log('isLoggedIn');
     if (req.isAuthenticated()) {
         next();
     } else {
@@ -24,7 +25,7 @@ exports.login = (req, res, next) => {
         }
         if (!user) {
             req.flash('loginError', info.message);
-            return res.redirect('/');
+            return res.redirect('/signin');
         }
         return req.login(user, (loginError)=> {
             if (loginError) {

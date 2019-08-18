@@ -28,7 +28,7 @@ router.post('/join', isNotLoggedIn, async (req, res, next) =>{
 } );
 
 router.post('/login',isNotLoggedIn,login);
-router.post('/logout',isLoggedIn,logout);
+router.get('/logout',isLoggedIn,logout);
 
 
 module.exports = router;

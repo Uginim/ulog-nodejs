@@ -16,6 +16,7 @@ const logger = require('./logger');
 const pageRouter = require('./routes/page');
 const postRouter = require('./routes/post');
 const authRouter = require('./routes/auth');
+const adminRouter = require('./routes/admin');
 
 const app = express();
 sequelize.sync();

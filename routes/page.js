@@ -4,8 +4,12 @@ const { Post, Bloginfo, Tag } = require('../models');
 const router = express.Router();
 
 router.get('/',async (req, res, next) => {
-    const posts = await Post.findAll();
-
+    const posts = await Post.findAll({ include:[
+        {
+            model:Tag,
+        }
+    ]});    
+    console.log("posts",posts[0].tags);
     res.render('post', {
         title: 'Blog Title',
         posts: posts,

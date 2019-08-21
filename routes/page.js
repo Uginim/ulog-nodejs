@@ -4,12 +4,19 @@ const { Post, Bloginfo, Tag } = require('../models');
 const router = express.Router();
 
 router.get('/',async (req, res, next) => {
-    const posts = await Post.findAll({ include:[
+    let posts = await Post.findAll({ include:[
         {
             model:Tag,
         }
     ]});    
-    console.log("posts",posts[0].tags);
+    posts = posts.map((post)=>{
+        const year = post.createdAt.getFullYear()
+            ,month = post.createdAt.getMonth()
+            ,day = post.createdAt.getDate();
+        post.formatDate = `${year}-${month<10?'0':''}${month}-${day<10?'0':''}${day}`
+        return post;
+    })
+    console.log('');
     res.render('post', {
         title: 'Blog Title',
         posts: posts,

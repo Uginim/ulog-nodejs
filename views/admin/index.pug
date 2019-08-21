@@ -1,1 +1,9 @@
-div this is admin page
+extends layout
+
+block content
+    if user
+        div this is admin page
+            a( href='/admin/posting' ) post editor
+    else 
+        form()
+            .input-group

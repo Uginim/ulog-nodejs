@@ -26,7 +26,7 @@ router.post('/join', isNotLoggedIn, async (req, res, next) =>{
         return next(error);
     }
 } );
-
+// router.post('/adminlogin',isNotAdmin);
 router.post('/login',isNotLoggedIn,login);
 router.get('/logout',isLoggedIn,logout);
 

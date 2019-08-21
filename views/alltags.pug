@@ -1,0 +1,6 @@
+extends layout
+
+block content
+    if tags
+        each tag in tags
+            strong #{tag.title}

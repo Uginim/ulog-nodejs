@@ -8,7 +8,11 @@ module.exports = (sequelize, DataTypes) => {
         content: {
             type:DataTypes.TEXT,
             allowNull: true,
-        }
+        },
+        summary: {
+            type:DataTypes.TEXT,
+            allowNull: true,
+        },
     },{ 
         sequelize,
         modelName:'post',   

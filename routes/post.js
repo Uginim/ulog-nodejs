@@ -6,7 +6,13 @@ const { Post, Bloginfo, Comment, Tag } = require('../models');
 
 router.get('/', async (req, res) => {
     // const bloginfo = await Bloginfo.findOne({where:{name:'title'}});
-    const posts = await Post.findAll();
+    const posts = await Post.findAll({ 
+        atributes:['id','title','summary','createdAt'],
+        include:[
+        {
+            model:Tag,
+        }
+    ]});
     res.render('post', {
         title: 'Blog Title',
         posts: posts,
@@ -29,11 +35,12 @@ router.get('/:id', async (req, res, next) => {
         postId: req.param.id,
     });
 });
-router.post('/write', (req, res, next) => {
-    
+router.post('/write', (req, res, next) => {     
+    req.body.tags.match(/#[^\s]*/g);
     Post.create({
         content: req.body.content,
         title: req.body.title,
+        summary: req.body.summary,
     });
     res.redirect('/');
 });

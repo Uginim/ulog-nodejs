@@ -1,13 +1,28 @@
 const passport = require('passport');
 
 exports.isLoggedIn = (req, res, next) => {
-    console.log('isLoggedIn');
     if (req.isAuthenticated()) {
         next();
     } else {
         res.status(403).send('please. sign in!')
     }
 };
+
+exports.isAdmin = (req, res, next) => {
+    if (req.isAuthenticated() && req.user.id ) {
+        next();
+    } else {
+        res.status(403).send('please. sign in!')
+    }
+};
+exports.isNotAdmin = (req, res, next) => {
+    if (!req.isAuthenticated()) {
+        next();
+    } else {
+        res.redirect('/admin');
+    }
+};
+
 
 exports.isNotLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {

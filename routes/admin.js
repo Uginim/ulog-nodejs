@@ -6,6 +6,7 @@ const { Post, Bloginfo, Tag, User } = require('../models');
 const router = express.Router();
 
 router.get('/', (req, res, next)=>{
+    const adminUser = User.findOne({where:{adminPermission:'true'}})
     res.render('admin',{
         title:'Admin Page'
     });

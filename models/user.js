@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         adminPermission:{
             type: DataTypes.BOOLEAN,
             allowNull: false,
-
+            defaultValue: false,
         },
         snsId: {
             type: DataTypes.STRING(50),

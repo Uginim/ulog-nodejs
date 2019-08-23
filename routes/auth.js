@@ -14,7 +14,7 @@ router.post('/join', isNotLoggedIn, async (req, res, next) =>{
             req.flash('already signed up')
             res.redirect()
         }
-        const hash = await bcrypt.hash(password, 12);
+        const hash = await bcrypt.hash(password, parseInt(process.HASH_SALT));
         await User.create({
             email,
             username,

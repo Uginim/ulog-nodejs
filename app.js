@@ -8,15 +8,17 @@ const bodyParser = require('body-parser');
 // const helmet = require('helmet');
 // const hpp = require('hpp');
 const path = require('path');
+const { sequelize } = require('./models');
+
 // const RedisStore = require('')
 
 const passportConfig = require('./passport');
-const { sequelize } = require('./models');
 const logger = require('./logger');
 const pageRouter = require('./routes/page');
 const postRouter = require('./routes/post');
 const authRouter = require('./routes/auth');
 const adminRouter = require('./routes/admin');
+
 
 const app = express();
 sequelize.sync();
@@ -43,7 +45,7 @@ app.use(cookieParser( process.env.COOKIE_SECRET));
 app.use(session({
     resave: false,
     saveUninitialized: false,
-    secret: process.env.COOKIE_SECRET,
+    secret: process.env.COOKIE_SECRET, 
     cookie: {
         httpOnly: true,
         secure: false,

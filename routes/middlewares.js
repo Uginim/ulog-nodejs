@@ -9,17 +9,17 @@ exports.isLoggedIn = (req, res, next) => {
 };
 
 exports.isAdmin = (req, res, next) => {
-    if (req.isAuthenticated() && req.user.id ) {
+    if (req.isAuthenticated() && req.user.adminPermission ) {
         next();
     } else {
-        res.status(403).send('please. sign in!')
+        res.status(403).send('please. sign in by Administer account')
     }
 };
 exports.isNotAdmin = (req, res, next) => {
-    if (!req.isAuthenticated()) {
+    if (!req.isAuthenticated() && !req.user.adminPermissio) {
         next();
     } else {
-        res.redirect('/admin');
+        res.redirect('/');
     }
 };
 

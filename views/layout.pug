@@ -21,8 +21,12 @@ html
                         if !user
                             a(class='btn btn-sm btn-outline-secondary' href='/signin') Sign in
                             a(class='btn btn-sm btn-outline-secondary' href='/signuppage') Sign up
+                        if user && user.adminPermission
+                            a(class='btn btn-sm btn-outline-secondary' href='/admin') Admin Page
                         if user                            
                             a(class='btn btn-sm btn-outline-secondary' href='auth/logout' ) Sign out
+
+
 
                         
             div(class='nav-scroller py-1 mb-2')

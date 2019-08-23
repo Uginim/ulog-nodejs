@@ -1,14 +1,16 @@
 //관리자 페이지 전용
 const express = require('express');
+const {isAdmin, isNotAdmin} = require('./middlewares');
 const { Post, Bloginfo, Tag, User } = require('../models');
 
 
 const router = express.Router();
 
-router.get('/', (req, res, next)=>{
+router.get('/', isAdmin ,(req, res, next)=>{
     const adminUser = User.findOne({where:{adminPermission:'true'}})
-    res.render('admin',{
-        title:'Admin Page'
+    res.render('./admin',{
+        title:'Admin Page',
+        user: req.user,
     });
 });
 router.get('/posting', (req, res) => {

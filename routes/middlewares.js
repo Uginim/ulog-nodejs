@@ -11,8 +11,8 @@ exports.isLoggedIn = (req, res, next) => {
 exports.isAdmin = (req, res, next) => {
     if (req.isAuthenticated() && req.user.adminPermission ) {
         next();
-    } else {
-        res.status(403).send('please. sign in by Administer account')
+    } else {        
+        res.status(403).send('please. sign in by administer account.');
     }
 };
 exports.isNotAdmin = (req, res, next) => {

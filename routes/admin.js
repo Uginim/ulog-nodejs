@@ -13,12 +13,12 @@ router.get('/', isAdmin ,(req, res, next)=>{
         user: req.user,
     });
 });
-router.get('/posting', (req, res) => {
+router.get('/posting',isAdmin, (req, res) => {
     res.render('./admin/posting-editor',{
         title:'Writing new Post',
         user: req.user,
     });
     
 });
-
-module.exports = router;
+router.get('/aboutmeEdit')
+module.exports = router; 

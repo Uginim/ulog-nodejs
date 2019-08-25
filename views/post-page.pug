@@ -1,19 +1,38 @@
 extends layout
 
 block content   
-    #title=`${title}`
-    #content=`${content}`
+    .post-title=`${title}`
+    .post-content
+        #content=`${content}`
+    each comment in post.comments
+        div(class='comment')=`${comment.content}`
+    hr
     if(user)
-        form(class='form-comment' action='/post/comment' method='POST')
-            .input-content
-                label(for='comment')
-                textarea(class='comment' name='comment')
-            button(class='btn btn-lg btn-primary btn-block' type='button') comment
+        form#form-comment(class='form-comment' action=`/post/${post.id}/comment` method='POST')            
+            .input-content.mb-3
+                label(for='comment') comment
+                textarea(class='form-control' name='comment')            
+            button(class='btn btn-lg btn-primary btn-block' type='button') comment    
     script(src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js")
     script.
         var converter = new showdown.Converter();
+        
         var content = document.getElementById('content');
         content.innerHTML = converter.makeHtml(content.innerHTML);
-        
+        //
+        if( document.getElementById('form-comment') ) {
+            document.getElementById('form-comment').addEventListener('change', function (e) {                
+                //- console.log(this, this.files);
+                var commentForm = document.getElementById('form-comment');
+                var formData = new FormData();
+                formData.append('comment',)
+                var xhr = new XMLHttpRequest();
+                xhr.onload = function() {
+
+                }        
+                xhr.open(`/post/#{post.id}/comment`)   
+            });
+        }
+
         
     

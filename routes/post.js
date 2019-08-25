@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
     // const bloginfo = await Bloginfo.findOne({where:{name:'title'}});
     const posts = await Post.findAll({ 
         atributes:['id','title','summary','createdAt'],
-        include:[
+        includes:[
         {
             model:Tag,
         }
@@ -23,14 +23,16 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res, next) => {
     const post = await Post.findOne({
         where:{id:req.params.id},
-        includes:{
+        include:[{
             model:Comment,
-        }
+        }],
 
     });    
+    console.log('post json:', JSON.stringify(post));
     res.render('post-page',{
         title: post.title,
         content: post.content,
+        post,
         user: req.user,
         postId: req.param.id,
     });
@@ -45,7 +47,7 @@ router.post('/write', (req, res, next) => {
     res.redirect('/');
 });
 router.post('/:id/comment', async (req, res, next) => {
-    req.params.id;
+    console.log('댓글 이벤트');
     const post = await Post.findOne({
         where:{id:req.params.id},
     });  

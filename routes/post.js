@@ -1,8 +1,8 @@
 const express = require('express');
-
+const multipartMiddleware = require('connect-multiparty')();
 const router = express.Router();
 
-const { Post, Bloginfo, Comment, Tag } = require('../models');
+const { Post, Bloginfo, Comment, Tag, User } = require('../models');
 
 router.get('/', async (req, res) => {
     // const bloginfo = await Bloginfo.findOne({where:{name:'title'}});
@@ -25,10 +25,14 @@ router.get('/:id', async (req, res, next) => {
         where:{id:req.params.id},
         include:[{
             model:Comment,
+            include:[{
+                model:User,
+                attributes:['username'],
+            }],
         }],
 
     });    
-    console.log('post json:', JSON.stringify(post));
+    
     res.render('post-page',{
         title: post.title,
         content: post.content,
@@ -46,16 +50,33 @@ router.post('/write', (req, res, next) => {
     });
     res.redirect('/');
 });
-router.post('/:id/comment', async (req, res, next) => {
+router.post('/:id/comment',multipartMiddleware, async (req, res, next) => {
+// router.post('/:id/comment', async (req, res, next) => {
     console.log('댓글 이벤트');
     const post = await Post.findOne({
         where:{id:req.params.id},
     });  
-    const newComment = await Comment.create({
-        comment:req.body.comment,
+    const user = await User.findOne({
+        where:{id:req.user.id},
     })
+    console.log('req.body',req.body);
+
+    const newComment = await Comment.create({
+        content:req.body.comment,
+    });
+    // console.log(newComment.get('content'));
+    console.log('content:',newComment.get('content'))
     post.addComment(newComment);
-    const comments = await Comment.findAll({where:{postid:req.params.id}});
+    user.addComment(newComment);
+    const comments = await Comment.findAll({
+        where:{postid:req.params.id},
+        include:[{
+            model:User,
+            attributes:['username'],
+        }],
+        
+    });
+    console.log("comment:",comments);
     res.send({comments});
 });
 

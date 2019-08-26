@@ -39,8 +39,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());// 이게 있어야 req.body를 쓸 수 있음
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser( process.env.COOKIE_SECRET));
 app.use(session({
     resave: false,

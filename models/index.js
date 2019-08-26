@@ -16,6 +16,8 @@ db.Tag = require('./tag')(sequelize, Sequelize);
 
 db.Post.hasMany(db.Comment);
 db.Comment.belongsTo(db.Post);
+db.User.hasMany(db.Comment);
+db.Comment.belongsTo(db.User);
 db.Post.belongsToMany(db.Tag,{through:'posttags'});
 db.Tag.belongsToMany(db.Post,{through:'posttags'});
 db.Comment.hasMany(db.Comment,{as:'reply'})

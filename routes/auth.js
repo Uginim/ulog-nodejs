@@ -6,7 +6,7 @@ const { User } = require('../models');
 const router = express.Router();
 
 router.post('/join', isNotLoggedIn, async (req, res, next) =>{
-    console.log(req.body);
+    
     const { email, username, password } = req.body;
     try {
         const existingUser = await User.findOne({ where: { email }});

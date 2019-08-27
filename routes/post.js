@@ -25,6 +25,7 @@ router.get('/:id', async (req, res, next) => {
         where:{id:req.params.id},
         include:[{
             model:Comment,
+            order:[['createdAt','DESC']],
             include:[{
                 model:User,
                 attributes:['username'],
@@ -32,7 +33,7 @@ router.get('/:id', async (req, res, next) => {
         }],
 
     });    
-    
+    console.log("post",post.comments[0].user);
     res.render('post-page',{
         title: post.title,
         content: post.content,
@@ -51,8 +52,6 @@ router.post('/write', (req, res, next) => {
     res.redirect('/');
 });
 router.post('/:id/comment',multipartMiddleware, async (req, res, next) => {
-// router.post('/:id/comment', async (req, res, next) => {
-    console.log('댓글 이벤트');
     const post = await Post.findOne({
         where:{id:req.params.id},
     });  
@@ -64,19 +63,18 @@ router.post('/:id/comment',multipartMiddleware, async (req, res, next) => {
     const newComment = await Comment.create({
         content:req.body.comment,
     });
-    // console.log(newComment.get('content'));
     console.log('content:',newComment.get('content'))
     post.addComment(newComment);
     user.addComment(newComment);
     const comments = await Comment.findAll({
         where:{postid:req.params.id},
+        order:[['createdAt','DESC']],
         include:[{
             model:User,
             attributes:['username'],
         }],
         
     });
-    console.log("comment:",comments);
     res.send({comments});
 });
 

@@ -1,20 +1,24 @@
 extends layout
 
 block content   
-    .post-title=`${title}`
+    h1.post-title #{title}
+    p.text-muted  #{post.createdAt}
     .post-content
-        #content=`${content}`
+        #content #{content}
     hr    
     if(user)
-        form#form-comment(class='form-comment' action=`/post/${post.id}/comment` method='POST')            
+        form#form-comment(class='form-comment' action='/post/#{post.id}/comment' method='POST')            
             .input-group.mb-3
                 .input-group-prepend
                     span.input-group-text comment
                 textarea#comment-text(class='form-control' name='comment') 
                 .input-group-append           
                     button#comment-send(class='btn btn-outline-secondary' type='button') send                    
-    each comment in post.comments
-        div(class='comment')=`${comment.content}`
+    #comment-area
+        each comment in post.comments
+            .comment-username #{comment.user.username}
+            .comment-createdat #{comment.createdAt}
+            div(class='comment') #{comment.content}
     script(src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js")
     script.
         var converter = new showdown.Converter();
@@ -26,16 +30,18 @@ block content
             document.getElementById('comment-send').addEventListener('click', function (e) {                                
                 var text = document.getElementById('comment-text');
                 var formData = new FormData();
+                var commentArea = document.getElementById('comment-area');
                 formData.append(text.name,text.value);
                 console.log('name,value',text.name, text.value);
                 console.log('form comment',formData.get(text.name));
                 var xhr = new XMLHttpRequest();
                 xhr.onload = function() {
-                    console.log(JSON.parse(xhr.responseText));
+                    commentArea.innerHtml = "";
+                    var comments = JSON.parse(xhr.responseText).comments;
+                    
+
                 }        
                 xhr.open('POST','/post/#{post.id}/comment'); 
-                //- xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencode');
-                //- xhr.setRequestHeader('Content-Type', 'multipart/form-data   ');
                 xhr.send(formData);  
             });
         }

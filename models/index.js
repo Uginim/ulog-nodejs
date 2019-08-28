@@ -13,6 +13,7 @@ db.Post = require('./post')(sequelize, Sequelize);
 db.Comment = require('./comment')(sequelize, Sequelize);
 db.User = require('./user')(sequelize,Sequelize);
 db.Tag = require('./tag')(sequelize, Sequelize);
+db.Category = require('./category')(sequelize, Sequelize);
 
 db.Post.hasMany(db.Comment);
 db.Comment.belongsTo(db.Post);
@@ -21,7 +22,14 @@ db.Comment.belongsTo(db.User);
 db.Post.belongsToMany(db.Tag,{through:'posttags'});
 db.Tag.belongsToMany(db.Post,{through:'posttags'});
 db.Comment.hasMany(db.Comment,{as:'reply'})
-
+db.Category.hasMany(db.Post);
+db.Post.belongsTo(db.Category);
+db.Category.hasMany(db.Category,{    
+    as: 'Parent',
+});
+db.Category.belongsTo(db.Category,{
+    foriegnKey: 'parentId',
+});
 // db.Bloginfo = require('./bloginfo');
 
 

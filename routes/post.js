@@ -33,7 +33,7 @@ router.get('/:id', async (req, res, next) => {
         }],
 
     });    
-    console.log("post",post.comments[0].user);
+   
     res.render('post-page',{
         title: post.title,
         content: post.content,

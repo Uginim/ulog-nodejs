@@ -10,6 +10,9 @@
   padding: 15px;
   margin: auto;
 }
+.hidden-input {
+  display: none;
+}
 
 /* stylelint-disable selector-list-comma-newline-after */
 

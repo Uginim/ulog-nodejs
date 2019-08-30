@@ -1,22 +1,39 @@
 extends layout
 
 block content
-    form#post-form(action='/post/write' method='post')
-        .input-title 
-            label(for='post-title') Title
-            input.post-title.editor(type=text name='title')
-        .input-content
-            label(for='post-tags') Tags
-            input.post-tag.editor(type=text name='tags')
-        .input-content
-            label(for='post-content')
-            textarea.post-content.editor(name='content')          
-        .input-content
-            label(for='post-summary') Summary
-            textarea.post-summary.editor(type=text name='summary')
-        button#post-btn.btn(type='submit') POST      
-    script(type="text/javascript" src="http://lab.lepture.com/editor/editor.js")
-    script(type="text/javascript" src="http://lab.lepture.com/editor/marked.js")
-    script.
-        var editor = new Editor();
-        editor.render();
+    .container
+        form#post-form.form-group(action='/post/write' method='post')
+            .input-group.my-3
+                .input-group-prepend
+                    span.input-group-text Title
+                input.form-control(type=text name='title')
+            .input-group.hidden-input
+                label(for='post-content')
+                textarea.post-content.editor(name='content')
+            .input-group
+                label(for='post-content')
+                #editSection.form-control
+            .input-group.my-3
+                .input-group-prepend
+                    span.input-group-text  Tags
+                input.form-control(type=text name='tags')        
+            .input-group.mb-3
+                .input-group-prepend
+                    span.input-group-text Summary
+                textarea.form-control(type=text name='summary')
+            button#post.form-control.btn-primary.py-3(type='submit') POST        
+        script.
+            var editor = new tui.Editor({
+                el: document.querySelector('#editSection'),
+                initialEditType: 'markdown',
+                previewStyle: 'vertical',
+                height: '300px'
+            });
+            var postForm = document.getElementById('post-form');
+            if(postForm) {
+                postForm.addEventListener('submit',(event)=> {
+                    var form = event.target;
+                    console.log('form:',form.children);
+                    event.preventDefault();
+                });
+            }

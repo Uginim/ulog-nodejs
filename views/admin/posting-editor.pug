@@ -4,12 +4,12 @@ block content
     .container
         form#post-form.form-group(action='/post/write' method='post')
             .input-group.my-3
-                .input-group-prepend
+                //- .input-group-prepend
                     span.input-group-text Title
-                input.form-control(type=text name='title')
+                input.form-control(type=text name='title' placeHolder='Title')
             .input-group.hidden-input
                 label(for='post-content')
-                textarea.post-content.editor(name='content')
+                textarea#text-content.post-content.editor(name='content')
             .input-group
                 label(for='post-content')
                 #editSection.form-control
@@ -30,10 +30,12 @@ block content
                 height: '300px'
             });
             var postForm = document.getElementById('post-form');
+            var postContent = document.getElementById('text-content');
             if(postForm) {
-                postForm.addEventListener('submit',(event)=> {
+                postForm.addEventListener('submit',(event)=> {                    
+                    postContent.innerText=editor.getHtml();
                     var form = event.target;
                     console.log('form:',form.children);
-                    event.preventDefault();
+                    //- event.preventDefault();
                 });
             }

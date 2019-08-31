@@ -13,7 +13,7 @@ const { sequelize } = require('./models');
 // const RedisStore = require('')
 
 const passportConfig = require('./passport');
-const logger = require('./logger');
+const logger = require('./utils/logger');
 const pageRouter = require('./routes/page');
 const postRouter = require('./routes/post');
 const authRouter = require('./routes/auth');

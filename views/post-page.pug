@@ -2,12 +2,13 @@ extends layout
 
 block content   
     h1.post-title #{title}
-    p.text-muted  #{post.createdAt}
+    - var formatter = new Intl.DateTimeFormat('ko-KR',{ year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+    p.text-muted  #{formatter.format(post.createdAt)}
     .post-content
         #content #{content}
     hr    
     if(user)
-        form#form-comment(class='form-comment' action='/post/#{post.id}/comment' method='POST')            
+        form#form-comment(class='form-comment' acti on='/post/#{post.id}/comment' method='POST')            
             .input-group.mb-3
                 .input-group-prepend
                     span.input-group-text comment
@@ -19,13 +20,13 @@ block content
             .comment-username #{comment.user.username}
             .comment-createdat #{comment.createdAt}
             div(class='comment') #{comment.content}
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js")
+    //- script(src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js")
     script.
-        var converter = new showdown.Converter();
+        //- var converter = new showdown.Converter();
         
         var content = document.getElementById('content');
-        content.innerHTML = converter.makeHtml(content.innerHTML);
-        //
+        //- content.innerHTML = converter.makeHtml(content.innerHTML);
+        content.innerHTML = content.innerText;
         if( document.getElementById('comment-send') ) {
             document.getElementById('comment-send').addEventListener('click', function (e) {                                
                 var text = document.getElementById('comment-text');

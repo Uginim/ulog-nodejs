@@ -3,16 +3,17 @@ extends layout
 block content
     .container
         form#post-form.form-group(action='/post/write' method='post')
-            .input-group.my-3
-                //- .input-group-prepend
-                    span.input-group-text Title
-                input.form-control(type=text name='title' placeHolder='Title')
+            h1
+                .input-group.my-3
+                    //- .input-group-prepend
+                        span.input-group-text Title
+                    input.form-control(type=text name='title' placeHolder='Title')
             .input-group.hidden-input
                 label(for='post-content')
                 textarea#text-content.post-content.editor(name='content')
             .input-group
                 label(for='post-content')
-                #editSection.form-control
+                #editSection.form-control.vh-100
             .input-group.my-3
                 .input-group-prepend
                     span.input-group-text  Tags
@@ -21,7 +22,7 @@ block content
                 .input-group-prepend
                     span.input-group-text Summary
                 textarea.form-control(type=text name='summary')
-            button#post.form-control.btn-primary.py-3(type='submit') POST        
+            button#post.form-control.btn-primary.py-1.h-100(type='submit') POST        
         script.
             var editor = new tui.Editor({
                 el: document.querySelector('#editSection'),

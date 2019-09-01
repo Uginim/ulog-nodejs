@@ -1,9 +1,34 @@
 extends layout
 
 block content
-    if user
-        div this is admin page
-            a( href='/admin/posting' ) post editor
-    else 
-        form()
-            .input-group
+    .container
+        if user
+            h1.py-3 Administrator Page
+            ul.nav.nav-tabs
+                li.nav-item(href='#')
+                    a.nav-link Blog info                        
+                li.nav-item(href='#')
+                    a.nav-link.active My Profile
+                li.nav-item(href='#')
+                    a.nav-link Posts
+            .container
+                a( href='/admin/posting' ) post editor
+    script.
+        var taps = document.getElementsByClassName('nav-link');
+        //- console.log('taps',taps);
+        var removeClassName = function(classNames,targetName) {
+            var resultClassNames = classNames.split(' ');
+            resultClassNames.reduce( (acc,cur) => {
+                acc = acc || [];
+                if(cur!==targetName) {
+                    acc.push(cur);
+                }
+            });
+            return resultClassNames.join(' ');
+        }
+        var clearActiveOfTaps = function (taps) {       
+            var i,classNames;
+            for(i=0;i<taps.length;i++) {
+                
+            }
+        }

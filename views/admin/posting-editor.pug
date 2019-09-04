@@ -10,7 +10,7 @@ block content
                     input.form-control(type=text name='title' placeHolder='Title')
             .input-group.hidden-input
                 label(for='post-content')
-                textarea#text-content.post-content.editor(name='content')
+                textarea.post-content.editor(name='content')
             .input-group
                 label(for='post-content')
                 #editSection.form-control.vh-100
@@ -31,12 +31,16 @@ block content
                 height: '300px'
             });
             var postForm = document.getElementById('post-form');
-            var postContent = document.getElementById('text-content');
+            //- var postContent = document.getElementById('text-content');
+            //- var postContent = document.querySelector('#post-form textarea[name="content"]');
+            var postContent = postForm.querySelector('textarea[name="content"]');
+            console.log('postContent', postContent);
             if(postForm) {
                 postForm.addEventListener('submit',(event)=> {                    
                     postContent.innerText=editor.getHtml();
                     var form = event.target;
                     console.log('form:',form.children);
-                    //- event.preventDefault();
+                    event.preventDefault();
                 });
             }
+            

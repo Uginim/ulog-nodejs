@@ -32,15 +32,15 @@ block content
                 var text = document.getElementById('comment-text');
                 var formData = new FormData();
                 var commentArea = document.getElementById('comment-area');
+                //- var commentArea = document.querySelector('form>input[name="comment"]');
                 formData.append(text.name,text.value);
                 console.log('name,value',text.name, text.value);
                 console.log('form comment',formData.get(text.name));
                 var xhr = new XMLHttpRequest();
                 xhr.onload = function() {
                     commentArea.innerHtml = "";
-                    var comments = JSON.parse(xhr.responseText).comments;
+                    var comments = JSON.parse(xhr.responseText).comments;            
                     
-
                 }        
                 xhr.open('POST','/post/#{post.id}/comment'); 
                 xhr.send(formData);  

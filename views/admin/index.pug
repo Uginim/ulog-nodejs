@@ -17,20 +17,29 @@ block content
         var taps = document.getElementsByClassName('nav-link');
         //- console.log('taps',taps);
         var removeClassName = function(classNames,targetName) {
+            console.log('classNames:',classNames, targetName);
             var resultClassNames = classNames.split(' ');
-            resultClassNames.reduce( (acc,cur) => {
-                acc = acc || [];
+            console.log(resultClassNames);
+            resultClassNames = resultClassNames.reduce( (acc,cur) => {               
                 if(cur!==targetName) {
                     acc.push(cur);
                 }
-            });
+                return acc;
+            },[]);       
             return resultClassNames.join(' ');
         }
-        var clearActiveOfTaps = function (taps) {       
-            var i,classNames;
-            for(i=0;i<taps.length;i++) {
-                taps.classNames = removeClassName(taps.classNames,'Active');        
-            }
+        var clearActiveOfTaps = function (taps) {                   
+            Array.prototype.forEach.call(taps, function (tap) {
+                tap.className = removeClassName(tap.className,'active');        
+            });
         }
+        Array.prototype.forEach.call(taps, function (tap) { // It's compatible with Internet Explorer
+            tap.addEventListener('click',(event)=>{
+                clearActiveOfTaps(taps);
+                console.log(tap.className);
+                tap.className=tap.className+' active';
+            });
+        })
+        //- taps.forEach()
         //NodeList객체의 forEach사용할 것!
         //clearActiveOfTaps(taps);

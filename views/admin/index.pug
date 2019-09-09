@@ -5,14 +5,21 @@ block content
         if user
             h1.py-3 Administrator Page
             ul.nav.nav-tabs
-                li.nav-item(href='#')
+                li.nav-item(href='#' data-tab-target='blog-info')
                     a.nav-link Blog info                        
-                li.nav-item(href='#')
+                li.nav-item(href='#' data-tab-target='profile')
                     a.nav-link.active My Profile
-                li.nav-item(href='#')
+                li.nav-item(href='#'data-tab-target='posts')
                     a.nav-link Posts
             .container
-                a( href='/admin/posting' ) post editor
+                .tab-content(data-tab-name='blog-info')
+                    a( href='/admin/posting' ) post editor
+                .tab-content(data-tab-name='profile')
+                    .content profile!
+                .tab-content(data-tab-name='posts')                
+                    .content posts
+
+                
     script.
         var taps = document.getElementsByClassName('nav-link');
         //- console.log('taps',taps);

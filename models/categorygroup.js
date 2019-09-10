@@ -5,14 +5,14 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.TEXT,
             allowNull: true,
         },
-        parentId: {
-            type:DataTypes.INTEGER,
-            references: {
-                model:CategoryGroup,
-                key:'id',
-            },
-            allowNull: true,
-        }
+        // parentId: {
+        //     type:DataTypes.INTEGER,
+        //     references: {
+        //         model:CategoryGroup,
+        //         key:'id',
+        //     },
+        //     allowNull: true,
+        // }
     },{ 
         sequelize,
         modelName:'categorygroup',   

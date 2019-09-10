@@ -42,19 +42,19 @@ db.Category.belongsTo(db.CategoryGroup);
 db.CategoryGroup.belongsTo(db.CategoryGroup,{
     as:'parent',
     foriegnKey: 'parentId',
-    targetKey:'parentId',
-});
+    targetKey:'id',
+}); 
 db.CategoryGroup.hasMany(db.CategoryGroup,{
-    targetKey:'parentId',
+    // targetKey:'parentId',
     sourceKey:'id',
-    foriegnKey: 'parentCategoryId',
+    foreignKey: 'parentId',
     as:{
         singular:'child',
         plural:'children',
     },
     constraints:false,
 });
-// db.Bloginfo = require('./bloginfo');
+db.Bloginfo = require('./bloginfo');
 
 
 module.exports=db;

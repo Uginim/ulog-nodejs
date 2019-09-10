@@ -13,8 +13,19 @@
 .hidden-input {
   display: none;
 }
+.hidden-content {
+  display: none;
+}
+body {
+  /* background-color: #7ee8fa;
+  background-image: linear-gradient(315deg, #7ee8fa 0%, #80ff72 74%); */
+  /* background-color: #abe9cd;
+  background-image: linear-gradient(270deg, #abe9cd 0%, #3eadcf 74%); */
 
+}
 /* stylelint-disable selector-list-comma-newline-after */
+
+
 
 .blog-header {
     line-height: 1;

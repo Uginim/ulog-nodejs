@@ -4,46 +4,28 @@ block content
     .container
         if user
             h1.py-3 Administrator Page
-            ul.nav.nav-tabs
-                li.nav-item(href='#' data-tab-target='blog-info')
-                    a.nav-link Blog info                        
-                li.nav-item(href='#' data-tab-target='profile')
-                    a.nav-link.active My Profile
-                li.nav-item(href='#'data-tab-target='posts')
-                    a.nav-link Posts
-            .container
-                .tab-content(data-tab-name='blog-info')
-                    a( href='/admin/posting' ) post editor
-                .tab-content(data-tab-name='profile')
-                    .content profile!
-                .tab-content(data-tab-name='posts')                
-                    .content posts
+            ul.nav.nav-tabs(role='tablist')
+                li.nav-item
+                    a#home-tab.nav-link.active(href='#home' data-toggle="tab" role='tab' aria-controls="home" aria-selected="true") Blog info                        
+                li.nav-item
+                    a#profile-tab.nav-link(href='#profile' data-toggle="tab" role='tab' aria-controls="profile" aria-selected="false") My Profile
+                li.nav-item
+                    a#posts-tab.nav-link(href='#posts' data-toggle="tab" role='tab'  aria-controls="posts" aria-selected="false") Posts
+                li.nav-item
+                    a#categories-tab.nav-link(href='#categories' data-toggle="tab" role='tab'  aria-controls="categories" aria-selected="false") Categories
+            .tab-content
+                #home.tab-pane.fade.show.active(role='tabpanel' aria-labelledby='home-tab')
+                    .container                        
+                #profile.tab-pane.fade(role='tabpanel' aria-labelledby='profile-tab')
+                    .container 
+                        div profile!
+                #posts.tab-pane.fade(role='tabpanel' aria-labelledby='posts-tab')
+                    .container
+                        a( href='/admin/posting' ) post editor  
+                        div posts
+                #categories.tab-pane.fade(role='tabpanel' aria-labelledby='categories-tab')
 
-                
+
     script.
-        var taps = document.getElementsByClassName('nav-link');
-        //- console.log('taps',taps);
-        var removeClassName = function(classNames,targetName) {
-            console.log('classNames:',classNames, targetName);
-            var resultClassNames = classNames.split(' ');
-            console.log(resultClassNames);
-            resultClassNames = resultClassNames.reduce( (acc,cur) => {               
-                if(cur!==targetName) {
-                    acc.push(cur);
-                }
-                return acc;
-            },[]);       
-            return resultClassNames.join(' ');
-        }
-        var clearActiveOfTaps = function (taps) {                   
-            Array.prototype.forEach.call(taps, function (tap) {
-                tap.className = removeClassName(tap.className,'active');        
-            });
-        }
-        Array.prototype.forEach.call(taps, function (tap) { // It's compatible with Internet Explorer
-            tap.addEventListener('click',(event)=>{
-                clearActiveOfTaps(taps);
-                console.log(tap.className);
-                tap.className=tap.className+' active';
-            });
-        });
+        
+        

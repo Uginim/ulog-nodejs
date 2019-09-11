@@ -33,19 +33,12 @@ db.Post.belongsTo(db.Category);
 db.CategoryGroup.hasMany(db.Category);
 db.Category.belongsTo(db.CategoryGroup);
 
-// db.CategoryGroup.hasMany(db.CategoryGroup,{
-//     as:{
-//         singular:'child',
-//         plural:'children',
-//     }
-// });
 db.CategoryGroup.belongsTo(db.CategoryGroup,{
     as:'parent',
-    foriegnKey: 'parentId',
+    foreignKey: 'parentId',
     targetKey:'id',
 }); 
 db.CategoryGroup.hasMany(db.CategoryGroup,{
-    // targetKey:'parentId',
     sourceKey:'id',
     foreignKey: 'parentId',
     as:{

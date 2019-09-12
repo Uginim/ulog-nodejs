@@ -2,5 +2,14 @@
     h4 카데고리 관리
     hr
     form
-        
-        button(class='btn btn-lg btn-primary btn-block' type='submit') 저장
+        form-group
+            label 카데고리
+            select.form-control(multiple)
+                if categoryGroups
+                    each categoryGroup in categoryGroups
+                        option | #{categoryGroup.name}
+                        if categoryGroup.categories
+                            each category in categoryGroup.categories
+                                option | #{category.name}
+    hr    
+    button(class='btn mt-3 btn-lg btn-primary btn-block' type='submit') 저장

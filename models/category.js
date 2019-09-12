@@ -7,11 +7,15 @@ module.exports = (sequelize, DataTypes) => {
         },
     },{ 
         sequelize,
-        modelName:'category',   
+        modelName:'category',
+        // name:{
+        //     singular:'category',   
+        //     plural:'categories'
+        // },
         timestamps: true,
         paranoid: true,
         charset: 'utf8',    
-        collate: 'utf8_general_ci',
+        collate: 'utf8_general_ci', 
     });
     return Category;
 };

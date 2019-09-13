@@ -1,15 +1,45 @@
 .container.mt-4
     h4 카데고리 관리
-    hr
     form
-        form-group
-            label 카데고리
-            select.form-control(multiple)
-                if categoryGroups
-                    each categoryGroup in categoryGroups
-                        option | #{categoryGroup.name}
-                        if categoryGroup.categories
-                            each category in categoryGroup.categories
-                                option | #{category.name}
+        form-group            
+            .container
+                .row
+                    .col
+                        button#create-group.btn.btn-outline-primary.btn-sm.ml-2 
+                            svg(width="15" height="15")
+                                line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
+                                line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
+                            span 그룹 추가
+                        button#delete-group.btn.btn-outline-primary.btn-sm.ml-2
+                            svg(width="15" height="15")
+                                //- line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
+                                line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
+                            span 그룹 삭제
+                        button#create-category.btn.btn-outline-primary.btn-sm.ml-2
+                            svg(width="15" height="15")
+                                line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
+                                line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
+                            span 카데고리 추가
+                        button#delete-category.btn.btn-outline-primary.btn-sm.ml-2
+                            svg(width="15" height="15")
+                                //- line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
+                                line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
+                            span 카데고리 삭제
+                        select#categories.form-control.mt-1(multiple size="15")
+                            if categoryGroups
+                                each categoryGroup in categoryGroups
+                                    option | #{categoryGroup.name}
+                                    if categoryGroup.categories
+                                        each category in categoryGroup.categories
+                                            option | #{category.name}
+                    .col
+                        form
+                            .my-4
+                            hr
+                            .form-group
+                                label 카데고리 이름
+                                input.form-control(type='text')
     hr    
     button(class='btn mt-3 btn-lg btn-primary btn-block' type='submit') 저장
+    script.
+        

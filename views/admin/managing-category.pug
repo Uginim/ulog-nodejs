@@ -42,4 +42,7 @@
     hr    
     button(class='btn mt-3 btn-lg btn-primary btn-block' type='submit') 저장
     script.
-        
+        var btnCreateGroup = document.getElementById('create-group');
+        btnCreateGroup.addEventListener((e)=> {
+            e.preventDefault();
+        })

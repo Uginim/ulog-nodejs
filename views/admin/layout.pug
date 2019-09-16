@@ -5,7 +5,20 @@ html
     link(rel="stylesheet" href="https://uicdn.toast.com/tui-editor/latest/tui-editor-contents.css")
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.33.0/codemirror.css")
     link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css")
-    body
-        script(src="https://uicdn.toast.com/tui-editor/latest/tui-editor-Editor-full.js")
-        block content
+    body        
+        .container
+            header(class=' py-1 mb-2')
+                div(class='row flex-nowrap justify-content-between align-items-center')  
+                    div(class='col-4 ')
+                        //- a(class='blog-header-logo text-dark' href='#') Large              
+                        h1.py-1 블로그 관리
+                    div(class='col-4 d-flex justify-content-end align-items-center')                   
+                        if !user
+                            a(class='btn btn-sm btn-outline-secondary' href='/signin') Sign in
+                        if user && user.adminPermission
+                            a(class='btn btn-sm btn-outline-secondary mr-2' href='/') Blog Page
+                            a(class='btn btn-sm btn-outline-secondary' href='auth/logout' ) Sign out            
+            
+            block content
+        script(src="https://uicdn.toast.com/tui-editor/latest/tui-editor-Editor-full.js")      
     include ../includes/footer.pug

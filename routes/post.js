@@ -4,6 +4,7 @@ const router = express.Router();
 
 const { Post, Bloginfo, Comment, Tag, User } = require('../models');
 
+
 router.get('/', async (req, res) => {
     // const bloginfo = await Bloginfo.findOne({where:{name:'title'}});
     const posts = await Post.findAll({ 
@@ -20,6 +21,7 @@ router.get('/', async (req, res) => {
        
     });
 });
+//post하나 가져오기
 router.get('/:id', async (req, res, next) => {
     const post = await Post.findOne({
         where:{id:req.params.id},

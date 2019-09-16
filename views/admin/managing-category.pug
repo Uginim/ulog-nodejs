@@ -26,12 +26,12 @@
                                 line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
                             span 카데고리 삭제
                         select#categories.form-control.mt-1(multiple size="15")
-                            if categoryGroups
-                                each categoryGroup in categoryGroups
-                                    option | #{categoryGroup.name}
-                                    if categoryGroup.categories
-                                        each category in categoryGroup.categories
-                                            option | #{category.name}
+                            //- if categoryGroups
+                            //-     each categoryGroup in categoryGroups
+                            //-         option | #{categoryGroup.name}
+                            //-         if categoryGroup.categories
+                            //-             each category in categoryGroup.categories
+                            //-                 option | #{category.name}
                     .col
                         form
                             .my-4
@@ -42,7 +42,66 @@
     hr    
     button(class='btn mt-3 btn-lg btn-primary btn-block' type='submit') 저장
     script.
+        var categoriesTab = document.querySelector('a[href="#categories"]');        
+        categoriesTab.addEventListener('click',e=>{
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET','/admin/categories');
+            xhr.onload = () => {
+                var categoryTreeElement = document.getElementById('categories');
+                var categoryTreeContent = JSON.parse(xhr.response);
+                var categoryGroups = categoryTreeContent.categoryGroups;
+                var categories = categoryTreeContent.categories;
+                //Make Tree Structure
+                var treeStructure = {
+                    root:[],
+                    groups:{},
+                    categories:{},
+                };
+                var putGroupInTree = (group,parentArray,treeStructure) => {
+                    const {id, name, parentId} =group ; 
+                    const newNode = {
+                        type:'group',
+                        id,
+                        name,
+                        parentId,
+                        child : [],
+                    };
+                    parentArray.push(newNode);
+                    treeStructure.groups[newNode.id]= newNode;
+                };
+                categoryGroups.forEach(categoryGroup=>{
+                    if(!categoryGroup.parentId){
+                        
+                    } else if(treStructure.groups[categorygroup.id]) {
+                        
+                    } else { // the orphans
+                        console.error('error');
+                    }
+                    //- categoryTree.append();
+                });
+            };
+            xhr.send();
+        });
+
         var btnCreateGroup = document.getElementById('create-group');
-        btnCreateGroup.addEventListener((e)=> {
+        btnCreateGroup.addEventListener('click',(e)=> {
             e.preventDefault();
-        })
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET','/admin/categorygroup/create');
+            xhr.onload = (e) => {
+                console.log(this.response);
+            };
+            xhr.send();
+        });
+        var btnCreateCategory = document.getElementById('create-category');
+        btnCreateCategory.addEventListener('click',(e)=> {
+            e.preventDefault();
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET','/admin/category/create');
+            xhr.onload = (e) => {
+                console.log(xhr.response);
+            };
+            xhr.send();
+        });
+        
+        

@@ -22,7 +22,7 @@ exports.isAdmin = (req, res, next) => {
                     timeSpan.innerText=time--;
                 }  
                 else {
-                    location.href="/";
+                    location="/";
                 }
             },1000);
         </script>`);

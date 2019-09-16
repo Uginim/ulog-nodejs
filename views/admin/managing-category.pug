@@ -25,7 +25,9 @@
                                 //- line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
                                 line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
                             span 카데고리 삭제
-                        select#categories.form-control.mt-1(multiple size="15")
+                        //- select#category-tree.form-control.mt-1(multiple size="15")                        
+                        //- #category-tree.mt-1
+                        ul#category-tree.list-group.mt-1                            
                             //- if categoryGroups
                             //-     each categoryGroup in categoryGroups
                             //-         option | #{categoryGroup.name}
@@ -47,7 +49,7 @@
             var xhr = new XMLHttpRequest();
             xhr.open('GET','/admin/categories');
             xhr.onload = () => {
-                var categoryTreeElement = document.getElementById('categories');
+                var categoryTreeElement = document.getElementById('category-tree');
                 var categoryTreeContent = JSON.parse(xhr.response);
                 var categoryGroups = categoryTreeContent.categoryGroups;
                 var categories = categoryTreeContent.categories;
@@ -90,7 +92,8 @@
                         } 
                         missingChildren[newNode.parentId].push(newNode);
                     }
-                    newNode.children= missingChildren[newNode.id];
+
+                    newNode.children= missingChildren[newNode.id] || newNode.children;
                     treeStructure.groups[newNode.id]= newNode;
                     //- categoryTree.append();
                 });
@@ -104,28 +107,48 @@
                     treeStructure.categories[newNode.id];
                 });
                 var makeElementFromNode = (node) => {
-                    var newElemnt = document.createElement('option');
+                    var newElement = document.createElement('li');
+                    newElement.className = 'list-group-item'
+                    
+                    newElement.setAttribute('value',`${node.type}:${node.id}`);
+                    var name = document.createElement('span');                    
+                    name.innerText = `${node.name}`;                    
+                    var newDiv = document.createElement('div');                                    
+                    newDiv.append(name);                                        
+                    newElement.appendChild(newDiv);
                     if(node.type==='category') {
-                        style="background-image:url(images/volvo.png);"
+                        newDiv.className="d-flex justify-content-between category-tree-node category";                        
                     } else if ( node.type === 'group'){
+                        newDiv.className="d-flex justify-content-between category-tree-node group";
+                        var numChildren = document.createElement('span');
+                        numChildren.className = "badge badge-primary badge-pill";
+                        numChildren.innerText = `${node.children.length}`;
+                        newDiv.append(numChildren);
+                    }    
 
-                    }
                     return newElement;
                 };
-                treeStructure.root.forEach(node=> {                    
-                    categoryTreeElement.append();
-                });
+                var updateCategoryTree = () => {
+                    categoryTreeElement.innerHTML="";
+                    var newElement = document.createElement('li');
+                    newElement.className = 'list-group-item'
+                    categoryTreeElement.appendChild(newElement);
+                    treeStructure.root.forEach(node=> {
+                        var newElement = makeElementFromNode(node);             
+                        categoryTreeElement.appendChild(newElement);
+                    });
+                }
+                updateCategoryTree();
             };
             xhr.send();
         });
-
         var btnCreateGroup = document.getElementById('create-group');
         btnCreateGroup.addEventListener('click',(e)=> {
             e.preventDefault();
             var xhr = new XMLHttpRequest();
             xhr.open('GET','/admin/categorygroup/create');
             xhr.onload = (e) => {
-                console.log(this.response);
+                console.log(xhr.response);
             };
             xhr.send();
         });

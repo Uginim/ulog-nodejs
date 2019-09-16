@@ -12,7 +12,20 @@ exports.isAdmin = (req, res, next) => {
     if (req.isAuthenticated() && req.user.adminPermission ) {
         next();
     } else {        
-        res.status(403).send('please. sign in by administer account.');
+        const time = 3;
+        res.status(403).send(`Please, sign in by administer account. <br> It will be redirected to "the root page" after <span id="time">${time}</span> second later. 
+        <script>
+            var time=${time};
+            var timeSpan = document.getElementById('time');
+            setInterval(()=>{
+                if(time > 0){
+                    timeSpan.innerText=time--;
+                }  
+                else {
+                    location.href="/";
+                }
+            },1000);
+        </script>`);
     }
 };
 exports.isNotAdmin = (req, res, next) => {

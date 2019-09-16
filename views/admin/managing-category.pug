@@ -102,7 +102,19 @@
                         treeStructure.groups[newNode.id].children.push(newNode);
                     }
                     treeStructure.categories[newNode.id];
-                })
+                });
+                var makeElementFromNode = (node) => {
+                    var newElemnt = document.createElement('option');
+                    if(node.type==='category') {
+                        style="background-image:url(images/volvo.png);"
+                    } else if ( node.type === 'group'){
+
+                    }
+                    return newElement;
+                };
+                treeStructure.root.forEach(node=> {                    
+                    categoryTreeElement.append();
+                });
             };
             xhr.send();
         });

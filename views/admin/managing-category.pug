@@ -57,28 +57,52 @@
                     groups:{},
                     categories:{},
                 };
-                var putGroupInTree = (group,parentArray,treeStructure) => {
+                var missingChildren = {};
+                var makeGroupNode = (group) => {
                     const {id, name, parentId} =group ; 
-                    const newNode = {
+                    return {
                         type:'group',
                         id,
                         name,
                         parentId,
-                        child : [],
+                        children : [],
                     };
-                    parentArray.push(newNode);
-                    treeStructure.groups[newNode.id]= newNode;
+
                 };
-                categoryGroups.forEach(categoryGroup=>{
-                    if(!categoryGroup.parentId){
-                        
-                    } else if(treStructure.groups[categorygroup.id]) {
-                        
-                    } else { // the orphans
-                        console.error('error');
+                var makeCategoryNode = (category) => {
+                    const {id, name, categorygroupId } = category;
+                    return {
+                        type:'category',
+                        id,
+                        name,
+                        parentId:categorygroupId,
                     }
+                }
+                categoryGroups.forEach(categoryGroup=>{
+                    var newNode = makeGroupNode(categoryGroup);
+                    if(!newNode.parentId){                        
+                        treeStructure.root.push(newNode);                        
+                    } else if(treeStructure.groups[newNode.id]) {
+                        treeStructure.groups[newNode.id].children.push(newNode);
+                    } else { // the missing child
+                        if(!missingChildren[newNode.parentId]){
+                            missingChildren[newNode.parentId] = [];                            
+                        } 
+                        missingChildren[newNode.parentId].push(newNode);
+                    }
+                    newNode.children= missingChildren[newNode.id];
+                    treeStructure.groups[newNode.id]= newNode;
                     //- categoryTree.append();
                 });
+                categories.forEach(category=>{
+                    var newNode = makeCategoryNode(category);
+                    if(!newNode.parentId){
+                        treeStructure.root.push(newNode); 
+                    } else {
+                        treeStructure.groups[newNode.id].children.push(newNode);
+                    }
+                    treeStructure.categories[newNode.id];
+                })
             };
             xhr.send();
         });

@@ -13,17 +13,48 @@
 .hidden-input {
   display: none;
 }
-#category-tree {
+
+
+
+
+
+
+#category-tree {  
   height: 30rem;
   border-style: solid;
   border-color: #aAaAaA;
   border-radius: 0.5rem;
   border-width: 0.1rem;
 }
+#category-tree * {
+  list-style: none;
+}
+#category-tree input[type="checkbox"].drop {
+  display: none;
+}
+#category-tree input[type="checkbox"]:checked.drop~ul { /* ~(general sibling selector) : ~ 표시 앞의 엘리먼트 이후에 존재하는 ~표시 뒤 모든 엘리먼트들을 선택함!*/
+  display: none;
+}
+
+#category-tree .li{  
+  padding-top:0.25em;
+  padding-bottom:0.25em;
+}
 .category-tree-node {
+  padding-left:2em;
+  margin-bottom:0.1em;
+  background-position: 0.2em;
+  background-repeat: no-repeat;
+}
+.category-tree-node {  
   padding-left:2em;
   background-position: 0.2em;
   background-repeat: no-repeat;
+  padding-right:0.75em;
+}
+.category-tree-node.root{  
+  margin-top:0.2em;
+  padding-left:0.75em;
 }
 .category-tree-node.category {
   background-image:url(images/menu.png);
@@ -31,10 +62,11 @@
 .category-tree-node.group {
   background-image:url(images/folder.png);  
 }
-.category-tree-node.group .badge {
+.category-tree-node .badge {
   margin-top:0.20em;
   margin-bottom:0.2em;
 }
+
 .hidden-content {
   display: none;
 }

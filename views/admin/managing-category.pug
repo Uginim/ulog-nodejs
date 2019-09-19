@@ -5,123 +5,131 @@
             .container
                 .row
                     .col
-                        button#create-group.btn.btn-outline-primary.btn-sm.ml-2 
-                            svg(width="15" height="15")
-                                line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
-                                line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
-                            span 그룹 추가
-                        button#delete-group.btn.btn-outline-primary.btn-sm.ml-2
-                            svg(width="15" height="15")
-                                //- line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
-                                line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
-                            span 그룹 삭제
-                        button#create-category.btn.btn-outline-primary.btn-sm.ml-2
-                            svg(width="15" height="15")
-                                line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
-                                line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
-                            span 카데고리 추가
-                        button#delete-category.btn.btn-outline-primary.btn-sm.ml-2
-                            svg(width="15" height="15")
-                                //- line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
-                                line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
-                            span 카데고리 삭제
+                        label 카데고리 목록
                         #category-tree
                             ul.list-group.mt-1                 
                     .col
                         form
                             .my-4
+                                button#create-group.btn.btn-outline-primary.btn-sm.ml-2 
+                                    svg(width="15" height="15")
+                                        line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
+                                        line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
+                                    span 그룹 추가
+                                button#delete-group.btn.btn-outline-primary.btn-sm.ml-2
+                                    svg(width="15" height="15")
+                                        //- line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
+                                        line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
+                                    span 그룹 삭제
+                                button#create-category.btn.btn-outline-primary.btn-sm.ml-2
+                                    svg(width="15" height="15")
+                                        line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
+                                        line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
+                                    span 카데고리 추가
+                                button#delete-category.btn.btn-outline-primary.btn-sm.ml-2
+                                    svg(width="15" height="15")
+                                        //- line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
+                                        line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
+                                    span 카데고리 삭제
                             hr
-                            .form-group
-                                label 카데고리 이름
-                                input.form-control(type='text')
+                            #edit-category.form-group
+                                label 이름
+                                input.form-control(type='text' name='name' disabled="true" )
+                                button(class='btn mt-3 btn-lg btn-primary btn-block' type='button') 수정
     hr    
-    button(class='btn mt-3 btn-lg btn-primary btn-block' type='submit') 저장
+    
     script.
-        var categoriesTab = document.querySelector('a[href="#categories"]');        
+        var categoriesTab = document.querySelector('a[href="#categories"]');        var treeStructureMaker = (() => {
+            var makeGroupNode = (group) => {
+                const {id, name, parentId} =group ; 
+                return {
+                    type:'group',
+                    id,
+                    name,
+                    parentId,
+                    children : [],
+                };
+
+            };
+            var makeCategoryNode = (category) => {
+                const {id, name, categorygroupId } = category;
+                return {
+                    type:'category',
+                    id,
+                    name,
+                    parentId:categorygroupId,
+                }
+            }
+            var buildTreeStructure = (categoryGroups,categories)=>{
+                var resultTreeStructure = {
+                    root:{
+                        type:'root',
+                        id:null,
+                        name:"root",
+                        parentId:null,
+                        children : [],
+                    },
+                    groups:{},
+                    categories:{},
+                };
+                var missingChildren = {};
+                categoryGroups.forEach(categoryGroup=>{
+                    var newNode = makeGroupNode(categoryGroup);
+                    if(!newNode.parentId){                        
+                        resultTreeStructure.root.children.push(newNode);                        
+                    } else if(resultTreeStructure.groups[newNode.id]) {
+                        resultTreeStructure.groups[newNode.id].children.push(newNode);
+                    } else { // the missing child
+                        if(!missingChildren[newNode.parentId]){
+                            missingChildren[newNode.parentId] = [];                            
+                        } 
+                        missingChildren[newNode.parentId].push(newNode);
+                    }
+
+                    newNode.children= missingChildren[newNode.id] || newNode.children;
+                    resultTreeStructure.groups[newNode.id]= newNode;                        
+                });
+                categories.forEach(category=>{
+                    var newNode = makeCategoryNode(category);
+                    if(!newNode.parentId){
+                        resultTreeStructure.root.children.push(newNode); 
+                    } else {
+                        resultTreeStructure.groups[newNode.id].children.push(newNode);
+                    }
+                    resultTreeStructure.categories[newNode.id]=newNode;
+                });
+                return resultTreeStructure;
+            }
+            return {
+                makeGroupNode,
+                makeCategoryNode,
+                buildTreeStructure,
+            }
+        })();
+
         categoriesTab.addEventListener('click',e=>{
             var xhr = new XMLHttpRequest();
             xhr.open('GET','/admin/categories');
             xhr.onload = () => {
-                var categoryTreeElement = document.getElementById('category-tree');
+                //- var categoryTreeElement = document.getElementById('category-tree');
+                var categoryTreeElement = document.querySelector('#category-tree ul');
                 var categoryTreeContent = JSON.parse(xhr.response);
                 var categoryGroups = categoryTreeContent.categoryGroups;
                 var categories = categoryTreeContent.categories;
-                //Make Tree Structure
-                var treeStructure;
-                
-                var makeGroupNode = (group) => {
-                    const {id, name, parentId} =group ; 
-                    return {
-                        type:'group',
-                        id,
-                        name,
-                        parentId,
-                        children : [],
-                    };
-
-                };
-                var makeCategoryNode = (category) => {
-                    const {id, name, categorygroupId } = category;
-                    return {
-                        type:'category',
-                        id,
-                        name,
-                        parentId:categorygroupId,
-                    }
-                }
-                var buildTreeStructure = ()=>{
-                    var resultTreeStructure = {
-                        root:{
-                            type:'root',
-                            id:null,
-                            name:"root",
-                            parentId:null,
-                            children : [],
-                        },
-                        groups:{},
-                        categories:{},
-                    };
-                    var missingChildren = {};
-                    categoryGroups.forEach(categoryGroup=>{
-                        var newNode = makeGroupNode(categoryGroup);
-                        if(!newNode.parentId){                        
-                            resultTreeStructure.root.children.push(newNode);                        
-                        } else if(resultTreeStructure.groups[newNode.id]) {
-                            resultTreeStructure.groups[newNode.id].children.push(newNode);
-                        } else { // the missing child
-                            if(!missingChildren[newNode.parentId]){
-                                missingChildren[newNode.parentId] = [];                            
-                            } 
-                            missingChildren[newNode.parentId].push(newNode);
-                        }
-
-                        newNode.children= missingChildren[newNode.id] || newNode.children;
-                        resultTreeStructure.groups[newNode.id]= newNode;                        
-                    });
-                    categories.forEach(category=>{
-                        var newNode = makeCategoryNode(category);
-                        if(!newNode.parentId){
-                            resultTreeStructure.root.children.push(newNode); 
-                        } else {
-                            resultTreeStructure.groups[newNode.id].children.push(newNode);
-                        }
-                        resultTreeStructure.categories[newNode.id];
-                    });
-                    return resultTreeStructure;
-                }
-                treeStructure = buildTreeStructure();
-                  
+                //Make Tree Structure                
+                var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);
+                console.dir(treeStructure);
                 var makeTreeElementFromNode = (node) => {
                     var newElement = document.createElement('li');
                     newElement.setAttribute('value',node.type==='root' ? `${node.type}:${node.type}` :`${node.type}:${node.id}`);
-                    newElement.setAttribute('draggable',"true");
+                    newElement.setAttribute('draggable',"true");                    
                     if(node.type==='category') {
-                        newElement.innerHTML = `<label class="d-flex justify-content-between category-tree-node category">
+                        newElement.innerHTML = `<label class="d-flex category-tree-node category">
                             <span>${node.name}</span>
                         </label>`;
                     } else {                       
-                        newElement.innerHTML = `<input type="checkbox" class="drop" checked id="${node.type}:${node.type}"><label for="${node.type}:${node.type}" class="d-flex justify-content-between category-tree-node ${node.type}">
-                            <span>${node.type==='root'? '/' : node.name}</span><span class="badge badge-primary badge-pill">${node.children.length}</span>
+                        newElement.innerHTML = `<input type="checkbox" class="drop" checked id="${node.type}:${node.type}"><label for="${node.type}:${node.type}" class="d-flex category-tree-node ${node.type}">
+                            <span class="mr-auto">${node.type==='root'? '/' : node.name}</span><span class="badge badge-primary badge-pill">${node.children.length}</span>
                         </label><ul></ul>`;                       
                     }
                     return newElement;
@@ -134,11 +142,7 @@
                         if(curNode.type!=='category'){
                             var ul = newElement.querySelector('ul');
                             curNode.children.forEach(childNode=> {
-                                var newChildElement = makeTreeElementFromNode(childNode);
-                                ul.appendChild(newChildElement);
-                                if(childNode.type==='group'){
-                                    appandTreeChildren(childNode,newChildElement)
-                                }
+                                appandTreeChildren(childNode,ul);
                             });
                         }
                         
@@ -147,31 +151,57 @@
                     var allListItems= categoryTreeElement.querySelectorAll('li');
                     var allCheckbox= categoryTreeElement.querySelectorAll('input[type="checkbox"]');
                     Array.prototype.forEach.call(allListItems,(li)=>{
-                        li.addEventListener('click',(e)=>{
+                        li.addEventListener('click',(e)=>{                   
+                            Array.prototype.forEach.call(categoryTreeElement.querySelectorAll('li'),(li)=>{
+                                li.classList.remove('active');
+                            });                           
+                            e.currentTarget.classList.toggle('active'); 
+                            e.stopPropagation();//input도 한번더 호출되는 듯..
+                            e.preventDefault();
+                        });
+                        
+                        li.addEventListener('dblclick',(e)=>{                            
+                            var checkbox= e.currentTarget.querySelector('input[type="checkbox"]');
+                            if(checkbox)
+                                checkbox.checked=!checkbox.checked;
+                             e.stopPropagation();
                             
                         });
-                        li.addEventListener('dblclick',(e)=>{
-                            console.dir(e.target);
-                            var checkbox= e.target.parentElement.querySelector('input[type="checkbox"]');
-                            console.log(e.target,checkbox);
-                            checkbox.checked=!checkbox.checked;
-                            console.log('dblclick checked att was changed',e.target.checked);
-                        });
-                        li.addEventListener();
                     });
+                    
                     Array.prototype.forEach.call(allCheckbox,(input)=>{
                         input.addEventListener('click',(e)=>{
-                            console.log('click');
+                            
                             e.preventDefault();
                         });
                         
                     });                 
+                     //동작하기 
+                    //- var allListItems = document.querySelectorAll('#category-tree li');
+                    Array.prototype.forEach.call(allListItems,(li)=>{ 
+                        li.addEventListener('click',(e)=>{
+                            var value = e.currentTarget.getAttribute('value');
+                            const [type, id] = value.split(':');
+                            var nameInput= document.querySelector('#edit-category input[name="name"]');
+                            nameInput.disabled=false;
+                            if(type==='category'){
+                                nameInput.value = treeStructure.categories[parseInt(id)].name;
+                            }
+                                
+                            else if(type==='group')
+                                nameInput.value = treeStructure.groups[parseInt(id)].name;
+                            else 
+                                nameInput.disabled=true;
+                            //- console.log(value, type, id);   
+                        });
+                    });
                 }
                 updateCategoryTree();           
                 
             };
             xhr.send();
         });
+
         var btnCreateGroup = document.getElementById('create-group');
         btnCreateGroup.addEventListener('click',(e)=> {
             e.preventDefault();
@@ -192,5 +222,16 @@
             };
             xhr.send();
         });
-        
+        var btnUpdate = document.querySelector('#edit-category button');
+        btnUpdate.addEventListener('click', (e)=> {
+            var targetItem = document.querySelector('#category-tree li.active');
+            var value = targetItem.getAttribute('value');
+            const [type, id] = value;
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST','/admin/category/update');
+            xhr.onload = (e) => {
+                console.log(xhr.response);
+            };
+            xhr.send();
+        });
         

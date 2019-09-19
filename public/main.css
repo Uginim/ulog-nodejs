@@ -35,23 +35,34 @@
 #category-tree input[type="checkbox"]:checked.drop~ul { /* ~(general sibling selector) : ~ 표시 앞의 엘리먼트 이후에 존재하는 ~표시 뒤 모든 엘리먼트들을 선택함!*/
   display: none;
 }
+#category-tree input[type="checkbox"]+label span:nth-child(1):after{
+  content:'➖';
+}
+#category-tree input[type="checkbox"]:checked+label span:nth-child(1):after{
+  content:'➕';
+}
 
-#category-tree .li{  
-  padding-top:0.25em;
-  padding-bottom:0.25em;
+#category-tree li{  
+  margin-top:0.25em;
+  margin-bottom:0.25em;
+}
+/* #category-tree li.active{  
+  background-color: #cccccc;    
+} */
+/* #category-tree li.active>label span:nth-child(1):after{   */
+#category-tree li.active>label:before{ 
+  /* background-color: #cccccc;   */
+  /* content:'✓'; */
+  content:'✔️';
 }
 .category-tree-node {
   padding-left:2em;
   margin-bottom:0.1em;
   background-position: 0.2em;
   background-repeat: no-repeat;
-}
-.category-tree-node {  
-  padding-left:2em;
-  background-position: 0.2em;
-  background-repeat: no-repeat;
   padding-right:0.75em;
 }
+
 .category-tree-node.root{  
   margin-top:0.2em;
   padding-left:0.75em;

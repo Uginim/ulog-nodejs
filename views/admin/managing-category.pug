@@ -39,7 +39,8 @@
     hr    
     
     script.
-        var categoriesTab = document.querySelector('a[href="#categories"]');        var treeStructureMaker = (() => {
+        var categoriesTab = document.querySelector('a[href="#categories"]');        
+        var treeStructureMaker = (() => {
             var makeGroupNode = (group) => {
                 const {id, name, parentId} =group ; 
                 return {

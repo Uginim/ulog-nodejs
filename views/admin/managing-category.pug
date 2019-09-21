@@ -107,7 +107,83 @@
                 buildTreeStructure,
             }
         })();
-
+        var makeTreeElementFromNode = (node) => {
+            var newElement = document.createElement('li');
+            newElement.setAttribute('value',node.type==='root' ? `${node.type}:${node.type}` :`${node.type}:${node.id}`);
+            newElement.setAttribute('draggable',"true");                    
+            if(node.type==='category') {
+                newElement.innerHTML = `<label class="d-flex category-tree-node category">
+                    <span>${node.name}</span>
+                </label>`;
+            } else {                       
+                newElement.innerHTML = `<input type="checkbox" class="drop" checked id="${node.type}:${node.type}"><label for="${node.type}:${node.type}" class="d-flex category-tree-node ${node.type}">
+                    <span class="mr-auto">${node.type==='root'? '/' : node.name}</span><span class="badge badge-primary badge-pill">${node.children.length}</span>
+                </label><ul></ul>`;                       
+            }
+            return newElement;
+        };
+        var updateCategoryTree = (categoryTreeElement,treeStructure) => {
+            categoryTreeElement.innerHTML=""; 
+            var appandTreeChildren = function appandTreeChildren(curNode,parentElement){
+                var newElement = makeTreeElementFromNode(curNode);
+                parentElement.appendChild(newElement);    
+                if(curNode.type!=='category'){
+                    var ul = newElement.querySelector('ul');
+                    curNode.children.forEach(childNode=> {
+                        appandTreeChildren(childNode,ul);
+                    });
+                }
+                
+            };
+            appandTreeChildren(treeStructure.root,categoryTreeElement);
+            var allListItems= categoryTreeElement.querySelectorAll('li');
+            var allCheckbox= categoryTreeElement.querySelectorAll('input[type="checkbox"]');
+            Array.prototype.forEach.call(allListItems,(li)=>{
+                li.addEventListener('click',(e)=>{                   
+                    Array.prototype.forEach.call(categoryTreeElement.querySelectorAll('li'),(li)=>{
+                        li.classList.remove('active');
+                    });                           
+                    e.currentTarget.classList.toggle('active'); 
+                    e.stopPropagation();//input도 한번더 호출되는 듯..
+                    e.preventDefault();
+                });
+                
+                li.addEventListener('dblclick',(e)=>{                            
+                    var checkbox= e.currentTarget.querySelector('input[type="checkbox"]');
+                    if(checkbox)
+                        checkbox.checked=!checkbox.checked;
+                        e.stopPropagation();
+                    
+                });
+            });
+            
+            Array.prototype.forEach.call(allCheckbox,(input)=>{
+                input.addEventListener('click',(e)=>{
+                    
+                    e.preventDefault();
+                });
+                
+            });                 
+                //동작하기 
+            Array.prototype.forEach.call(allListItems,(li)=>{ 
+                li.addEventListener('click',(e)=>{
+                    var value = e.currentTarget.getAttribute('value');
+                    const [type, id] = value.split(':');
+                    var nameInput= document.querySelector('#edit-category input[name="name"]');
+                    nameInput.disabled=false;
+                    if(type==='category'){
+                        nameInput.value = treeStructure.categories[parseInt(id)].name;
+                    }
+                        
+                    else if(type==='group')
+                        nameInput.value = treeStructure.groups[parseInt(id)].name;
+                    else 
+                        nameInput.disabled=true;
+                    //- console.log(value, type, id);   
+                });
+            });
+        }
+                  
         categoriesTab.addEventListener('click',e=>{
             var xhr = new XMLHttpRequest();
             xhr.open('GET','/admin/categories');
@@ -120,84 +196,7 @@
                 //Make Tree Structure                
                 var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);
                 console.dir(treeStructure);
-                var makeTreeElementFromNode = (node) => {
-                    var newElement = document.createElement('li');
-                    newElement.setAttribute('value',node.type==='root' ? `${node.type}:${node.type}` :`${node.type}:${node.id}`);
-                    newElement.setAttribute('draggable',"true");                    
-                    if(node.type==='category') {
-                        newElement.innerHTML = `<label class="d-flex category-tree-node category">
-                            <span>${node.name}</span>
-                        </label>`;
-                    } else {                       
-                        newElement.innerHTML = `<input type="checkbox" class="drop" checked id="${node.type}:${node.type}"><label for="${node.type}:${node.type}" class="d-flex category-tree-node ${node.type}">
-                            <span class="mr-auto">${node.type==='root'? '/' : node.name}</span><span class="badge badge-primary badge-pill">${node.children.length}</span>
-                        </label><ul></ul>`;                       
-                    }
-                    return newElement;
-                };
-                var updateCategoryTree = () => {
-                    categoryTreeElement.innerHTML=""; 
-                    var appandTreeChildren = function appandTreeChildren(curNode,parentElement){
-                        var newElement = makeTreeElementFromNode(curNode);
-                        parentElement.appendChild(newElement);    
-                        if(curNode.type!=='category'){
-                            var ul = newElement.querySelector('ul');
-                            curNode.children.forEach(childNode=> {
-                                appandTreeChildren(childNode,ul);
-                            });
-                        }
-                        
-                    };
-                    appandTreeChildren(treeStructure.root,categoryTreeElement);
-                    var allListItems= categoryTreeElement.querySelectorAll('li');
-                    var allCheckbox= categoryTreeElement.querySelectorAll('input[type="checkbox"]');
-                    Array.prototype.forEach.call(allListItems,(li)=>{
-                        li.addEventListener('click',(e)=>{                   
-                            Array.prototype.forEach.call(categoryTreeElement.querySelectorAll('li'),(li)=>{
-                                li.classList.remove('active');
-                            });                           
-                            e.currentTarget.classList.toggle('active'); 
-                            e.stopPropagation();//input도 한번더 호출되는 듯..
-                            e.preventDefault();
-                        });
-                        
-                        li.addEventListener('dblclick',(e)=>{                            
-                            var checkbox= e.currentTarget.querySelector('input[type="checkbox"]');
-                            if(checkbox)
-                                checkbox.checked=!checkbox.checked;
-                             e.stopPropagation();
-                            
-                        });
-                    });
-                    
-                    Array.prototype.forEach.call(allCheckbox,(input)=>{
-                        input.addEventListener('click',(e)=>{
-                            
-                            e.preventDefault();
-                        });
-                        
-                    });                 
-                     //동작하기 
-                    //- var allListItems = document.querySelectorAll('#category-tree li');
-                    Array.prototype.forEach.call(allListItems,(li)=>{ 
-                        li.addEventListener('click',(e)=>{
-                            var value = e.currentTarget.getAttribute('value');
-                            const [type, id] = value.split(':');
-                            var nameInput= document.querySelector('#edit-category input[name="name"]');
-                            nameInput.disabled=false;
-                            if(type==='category'){
-                                nameInput.value = treeStructure.categories[parseInt(id)].name;
-                            }
-                                
-                            else if(type==='group')
-                                nameInput.value = treeStructure.groups[parseInt(id)].name;
-                            else 
-                                nameInput.disabled=true;
-                            //- console.log(value, type, id);   
-                        });
-                    });
-                }
-                updateCategoryTree();           
+                updateCategoryTree(categoryTreeElement,treeStructure); 
                 
             };
             xhr.send();

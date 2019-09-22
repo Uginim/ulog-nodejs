@@ -32,7 +32,7 @@
                                         line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
                                     span 카데고리 삭제
                             hr
-                            #edit-category.form-group
+                            form#edit-category.form-group
                                 label 이름
                                 input.form-control(type='text' name='name' disabled="true" )
                                 button(class='btn mt-3 btn-lg btn-primary btn-block' type='button') 수정
@@ -183,7 +183,7 @@
                 });
             });
         }
-                  
+        
         categoriesTab.addEventListener('click',e=>{
             var xhr = new XMLHttpRequest();
             xhr.open('GET','/admin/categories');
@@ -201,27 +201,41 @@
             };
             xhr.send();
         });
-
+        //그룹 생성
         var btnCreateGroup = document.getElementById('create-group');
         btnCreateGroup.addEventListener('click',(e)=> {
             e.preventDefault();
             var xhr = new XMLHttpRequest();
             xhr.open('GET','/admin/categorygroup/create');
-            xhr.onload = (e) => {
-                console.log(xhr.response);
+            xhr.onload = () => {
+                var categoryTreeElement = document.querySelector('#category-tree ul');
+                var categoryTreeContent = JSON.parse(xhr.response);
+                var categoryGroups = categoryTreeContent.categoryGroups;
+                var categories = categoryTreeContent.categories;
+                //Make Tree Structure                
+                var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);                
+                updateCategoryTree(categoryTreeElement,treeStructure);
             };
             xhr.send();
         });
+        //카데고리 생성
         var btnCreateCategory = document.getElementById('create-category');
         btnCreateCategory.addEventListener('click',(e)=> {
             e.preventDefault();
             var xhr = new XMLHttpRequest();
             xhr.open('GET','/admin/category/create');
             xhr.onload = (e) => {
-                console.log(xhr.response);
+                var categoryTreeElement = document.querySelector('#category-tree ul');
+                var categoryTreeContent = JSON.parse(xhr.response);
+                var categoryGroups = categoryTreeContent.categoryGroups;
+                var categories = categoryTreeContent.categories;
+                //Make Tree Structure                
+                var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);                
+                updateCategoryTree(categoryTreeElement,treeStructure);;
             };
             xhr.send();
         });
+        //수정 버튼
         var btnUpdate = document.querySelector('#edit-category button');
         btnUpdate.addEventListener('click', (e)=> {
             var targetItem = document.querySelector('#category-tree li.active');
@@ -230,7 +244,13 @@
             var xhr = new XMLHttpRequest();
             xhr.open('POST','/admin/category/update');
             xhr.onload = (e) => {
-                console.log(xhr.response);
+                var categoryTreeElement = document.querySelector('#category-tree ul');
+                var categoryTreeContent = JSON.parse(xhr.response);
+                var categoryGroups = categoryTreeContent.categoryGroups;
+                var categories = categoryTreeContent.categories;
+                //Make Tree Structure                
+                var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);                
+                updateCategoryTree(categoryTreeElement,treeStructure);
             };
             xhr.send();
         });

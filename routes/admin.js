@@ -80,7 +80,9 @@ router.get('/categorygroup/create',isAdmin,(req, res)=>{
     });
     // 
 });
-
+route.put('/update/category',isAdmin,(req, res)=>{
+    
+});
 
 // router.get('/aboutmeEdit')
 module.exports = router; 

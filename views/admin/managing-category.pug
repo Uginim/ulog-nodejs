@@ -239,6 +239,7 @@
         var btnUpdate = document.querySelector('#edit-category button');
         btnUpdate.addEventListener('click', (e)=> {
             var targetItem = document.querySelector('#category-tree li.active');
+            var form = document.getElementById('edit-category');
             var value = targetItem.getAttribute('value');
             const [type, id] = value;
             var xhr = new XMLHttpRequest();

@@ -248,7 +248,7 @@
             formData.append('id',id);
             formData.append('name',name);
             var xhr = new XMLHttpRequest();
-            xhr.open('PUT','/admin/category/update');
+            xhr.open('PUT','/admin/update/category');
             xhr.onload = (e) => {
                 var categoryTreeElement = document.querySelector('#category-tree ul');
                 var categoryTreeContent = JSON.parse(xhr.response);

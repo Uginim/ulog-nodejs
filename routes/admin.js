@@ -80,7 +80,7 @@ router.get('/categorygroup/create',isAdmin,(req, res)=>{
     });
     // 
 });
-route.put('/update/category',isAdmin,(req, res)=>{
+router.put('/update/category',isAdmin,(req, res)=>{
     
 });
 

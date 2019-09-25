@@ -32,12 +32,12 @@
                                         line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
                                     span 카데고리 삭제
                             hr
-                            form#edit-category.form-group
-                                label 이름
-                                input.form-control(type='text' name='name' disabled="true" )
-                                button(class='btn mt-3 btn-lg btn-primary btn-block' type='button') 수정
+                        form#edit-category.form-group
+                            label 이름
+                            input.form-control(type='text' name='name' disabled="true" )
+                            button(class='btn mt-3 btn-lg btn-primary btn-block' type='button') 수정
     hr    
-    
+    button
     script.
         var categoriesTab = document.querySelector('a[href="#categories"]');        
         var treeStructureMaker = (() => {
@@ -164,7 +164,7 @@
                 });
                 
             });                 
-                //동작하기 
+            //동작하기 
             Array.prototype.forEach.call(allListItems,(li)=>{ 
                 li.addEventListener('click',(e)=>{
                     var value = e.currentTarget.getAttribute('value');
@@ -239,11 +239,16 @@
         var btnUpdate = document.querySelector('#edit-category button');
         btnUpdate.addEventListener('click', (e)=> {
             var targetItem = document.querySelector('#category-tree li.active');
+            var formData = new FormData();
             var form = document.getElementById('edit-category');
+            var name = form.querySelector('input[name="name"]').value;
             var value = targetItem.getAttribute('value');
-            const [type, id] = value;
+            const [type, id] = value.split(':');
+            formData.append('type',type);
+            formData.append('id',id);
+            formData.append('name',name);
             var xhr = new XMLHttpRequest();
-            xhr.open('POST','/admin/category/update');
+            xhr.open('PUT','/admin/category/update');
             xhr.onload = (e) => {
                 var categoryTreeElement = document.querySelector('#category-tree ul');
                 var categoryTreeContent = JSON.parse(xhr.response);
@@ -253,6 +258,6 @@
                 var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);                
                 updateCategoryTree(categoryTreeElement,treeStructure);
             };
-            xhr.send();
+            xhr.send(formData);
         });
         

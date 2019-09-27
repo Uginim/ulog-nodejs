@@ -78,8 +78,8 @@
                     var newNode = makeGroupNode(categoryGroup);
                     if(!newNode.parentId){                        
                         resultTreeStructure.root.children.push(newNode);                        
-                    } else if(resultTreeStructure.groups[newNode.id]) {
-                        resultTreeStructure.groups[newNode.id].children.push(newNode);
+                    } else if(resultTreeStructure.groups[newNode.parentId]) {
+                        resultTreeStructure.groups[newNode.parentId].children.push(newNode);
                     } else { // the missing child
                         if(!missingChildren[newNode.parentId]){
                             missingChildren[newNode.parentId] = [];                            
@@ -205,8 +205,13 @@
         var btnCreateGroup = document.getElementById('create-group');
         btnCreateGroup.addEventListener('click',(e)=> {
             e.preventDefault();
+            var targetItem = document.querySelector('#category-tree li.active');
+            var value = targetItem.getAttribute('value');
+            const [type, id] = value.split(':');
+            var formData = new FormData();            
+            formData.append('parentId',id);  
             var xhr = new XMLHttpRequest();
-            xhr.open('GET','/admin/categorygroup/create');
+            xhr.open('POST','/admin/categorygroup/create');
             xhr.onload = () => {
                 var categoryTreeElement = document.querySelector('#category-tree ul');
                 var categoryTreeContent = JSON.parse(xhr.response);
@@ -216,7 +221,7 @@
                 var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);                
                 updateCategoryTree(categoryTreeElement,treeStructure);
             };
-            xhr.send();
+            xhr.send(formData);
         });
         //카데고리 생성
         var btnCreateCategory = document.getElementById('create-category');

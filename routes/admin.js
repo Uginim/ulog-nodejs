@@ -6,6 +6,33 @@ const { Post, Bloginfo, Tag, User, Category, CategoryGroup } = require('../model
 
 
 const router = express.Router();
+const getAllCategoryItem = async () => {
+    const categoryGroups= await CategoryGroup.findAll({
+        include:[
+            Category,
+        ],
+        attributes:[
+            'id',
+            'name',
+            'parentId',
+        ],
+    });
+    const categories= await Category.findAll({
+        where:{
+            categorygroupid:null,
+        },
+        attributes:[
+            'id',
+            'name',
+            'categorygroupId',
+        ],
+    });
+    return {
+        categoryGroups,
+        categories,
+    };
+}
+
 
 router.get('/', isAdmin ,(req, res, next)=>{
     const adminUser = User.findOne({where:{adminPermission:'true'}})
@@ -21,39 +48,15 @@ router.get('/posting',isAdmin, (req, res) => {
     });
     
 });
-router.get('/categories',isAdmin,async (req, res)=>{
-    const categoryGroups= await CategoryGroup.findAll({
-        include:[
-            Category,
-        ],
-        attributes:[
-            'id',
-            'name',
-            'parentId',
-        ],
-    });
-    const categories= await Category.findAll({
-        where:{
-            categorygroupid:null,
-        },
-        attributes:[
-            'id',
-            'name',
-            'categorygroupId',
-        ],
-    });
-    res.json({
-        categoryGroups,
-        categories,
-    });
+router.get('/categories',isAdmin,async (req, res)=>{  
+    res.json(getAllCategoryItem());
 });
-router.get('/category/create',isAdmin,(req, res)=>{
+router.post('/category/create',isAdmin,(req, res)=>{
     Category.create({
         name:'새 카데고리',
     })
     .then((model)=>{
-        const {id, name} = model;
-        // console.log(id,name);
+        const {id, name} = model;        
         res.json({
             id,
             name,
@@ -64,63 +67,37 @@ router.get('/category/create',isAdmin,(req, res)=>{
     });
     // 
 });
-router.get('/categorygroup/create',isAdmin,(req, res)=>{
+router.post('/categorygroup/create',isAdmin,multipartMiddleware,async (req, res)=>{
+    
+
     CategoryGroup.create({
         name:'새 그룹',
+        parentId:req.body.parentId,
     })
     .then((model)=>{
-        const {id, name} = model;
-        // console.log(id,name);
-        res.json({
-            id,
-            name,
-        });
+        const {id, name} = model;    
+        res.json(getAllCategoryItem());    
     })
     .catch(error=>{
         res.send();
     });
     // 
 });
-router.put('/update/category',isAdmin,multipartMiddleware,async (req, res)=>{
-    console.log('update ', req.body.type);
+router.put('/update/category',isAdmin,multipartMiddleware,async (req, res)=>{    
     if(req.body.type==='category'){
         let category = await Category.findOne({where:{
             id:req.body.id,
-        }});
-        console.log('category: ',category);
+        }});        
         await Category.update({name:req.body.name},{where:{id:req.body.id}});
     }
     else if(req.body.type==='group'){
         let categoryGroup = await CategoryGroup.findOne({where:{
             id:req.body.id,
-        }});
-        console.log('categoryGroup: ',categoryGroup);
+        }});        
         await CategoryGroup.update({name:req.body.name},{where:{id:req.body.id}});
     }
-    const categoryGroups= await CategoryGroup.findAll({
-        include:[
-            Category,
-        ],
-        attributes:[
-            'id',
-            'name',
-            'parentId',
-        ],
-    });
-    const categories= await Category.findAll({
-        where:{
-            categorygroupid:null,
-        },
-        attributes:[
-            'id',
-            'name',
-            'categorygroupId',
-        ],
-    });
-    res.json({
-        categoryGroups,
-        categories,
-    });
+    
+    res.json(getAllCategoryItem());
 });
 
 // router.get('/aboutmeEdit')

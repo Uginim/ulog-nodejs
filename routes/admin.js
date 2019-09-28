@@ -18,13 +18,13 @@ const getAllCategoryItem = async () => {
         ],
     });
     const categories= await Category.findAll({
-        where:{
-            categorygroupid:null,
-        },
+        // where:{
+        //     parentId:null,
+        // },
         attributes:[
             'id',
             'name',
-            'categorygroupId',
+            'parentId',
         ],
     });
     return {
@@ -49,39 +49,41 @@ router.get('/posting',isAdmin, (req, res) => {
     
 });
 router.get('/categories',isAdmin,async (req, res)=>{  
-    res.json(getAllCategoryItem());
+    const json = await getAllCategoryItem();
+    res.json(json);
 });
-router.post('/category/create',isAdmin,(req, res)=>{
-    Category.create({
+router.post('/category/create',isAdmin,multipartMiddleware,async (req, res)=>{
+    const {parentId}=req.body;
+    await Category.create({
         name:'새 카데고리',
-    })
-    .then((model)=>{
-        const {id, name} = model;        
-        res.json({
-            id,
-            name,
-        });
-    })
-    .catch(error=>{
-        res.send();
+        parentId,
     });
+    const json = await getAllCategoryItem();
+    res.json(json);
+    // Category.create({
+    //     name:'새 카데고리',
+    //     parentId:req.body.parentId,
+    // })
+    // .then((model)=>{
+    //     const {id, name} = model;        
+    //     res.json({
+    //         id,
+    //         name,
+    //     });
+    // })
+    // .catch(error=>{
+    //     res.send();
+    // });
     // 
 });
 router.post('/categorygroup/create',isAdmin,multipartMiddleware,async (req, res)=>{
-    
 
-    CategoryGroup.create({
+    await CategoryGroup.create({
         name:'새 그룹',
         parentId:req.body.parentId,
-    })
-    .then((model)=>{
-        const {id, name} = model;    
-        res.json(getAllCategoryItem());    
-    })
-    .catch(error=>{
-        res.send();
     });
-    // 
+    const json = await getAllCategoryItem();
+    res.json(json);
 });
 router.put('/update/category',isAdmin,multipartMiddleware,async (req, res)=>{    
     if(req.body.type==='category'){

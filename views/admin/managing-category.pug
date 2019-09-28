@@ -37,7 +37,6 @@
                             input.form-control(type='text' name='name' disabled="true" )
                             button(class='btn mt-3 btn-lg btn-primary btn-block' type='button') 수정
     hr    
-    button
     script.
         var categoriesTab = document.querySelector('a[href="#categories"]');        
         var treeStructureMaker = (() => {
@@ -53,12 +52,12 @@
 
             };
             var makeCategoryNode = (category) => {
-                const {id, name, categorygroupId } = category;
+                const {id, name, parentId } = category;
                 return {
                     type:'category',
                     id,
                     name,
-                    parentId:categorygroupId,
+                    parentId,
                 }
             }
             var buildTreeStructure = (categoryGroups,categories)=>{
@@ -95,7 +94,7 @@
                     if(!newNode.parentId){
                         resultTreeStructure.root.children.push(newNode); 
                     } else {
-                        resultTreeStructure.groups[newNode.id].children.push(newNode);
+                        resultTreeStructure.groups[newNode.parentId].children.push(newNode);
                     }
                     resultTreeStructure.categories[newNode.id]=newNode;
                 });
@@ -173,8 +172,7 @@
                     nameInput.disabled=false;
                     if(type==='category'){
                         nameInput.value = treeStructure.categories[parseInt(id)].name;
-                    }
-                        
+                    }                        
                     else if(type==='group')
                         nameInput.value = treeStructure.groups[parseInt(id)].name;
                     else 
@@ -183,7 +181,7 @@
                 });
             });
         }
-        
+        //카데고리 탭 클릭 
         categoriesTab.addEventListener('click',e=>{
             var xhr = new XMLHttpRequest();
             xhr.open('GET','/admin/categories');
@@ -209,7 +207,10 @@
             var value = targetItem.getAttribute('value');
             const [type, id] = value.split(':');
             var formData = new FormData();            
-            formData.append('parentId',id);  
+            if(type==='group')            
+                formData.append('parentId',id);
+            else 
+                formData.append('parentId','null');  
             var xhr = new XMLHttpRequest();
             xhr.open('POST','/admin/categorygroup/create');
             xhr.onload = () => {
@@ -225,10 +226,18 @@
         });
         //카데고리 생성
         var btnCreateCategory = document.getElementById('create-category');
-        btnCreateCategory.addEventListener('click',(e)=> {
+        btnCreateCategory.addEventListener('click',(e)=> { 
             e.preventDefault();
+            var targetItem = document.querySelector('#category-tree li.active');
+            var value = targetItem.getAttribute('value');
+            const [type, id] = value.split(':');
+            var formData = new FormData();
+            if(type==='group')            
+                formData.append('parentId',id);
+            else 
+                formData.append('parentId','null');
             var xhr = new XMLHttpRequest();
-            xhr.open('GET','/admin/category/create');
+            xhr.open('POST','/admin/category/create');
             xhr.onload = (e) => {
                 var categoryTreeElement = document.querySelector('#category-tree ul');
                 var categoryTreeContent = JSON.parse(xhr.response);
@@ -238,7 +247,7 @@
                 var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);                
                 updateCategoryTree(categoryTreeElement,treeStructure);;
             };
-            xhr.send();
+            xhr.send(formData);
         });
         //수정 버튼
         var btnUpdate = document.querySelector('#edit-category button');

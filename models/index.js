@@ -30,12 +30,12 @@ db.Comment.hasMany(db.Comment,{as:'reply'})
 db.Category.hasMany(db.Post);
 db.Post.belongsTo(db.Category);
 
-db.CategoryGroup.hasMany(db.Category);
-db.Category.belongsTo(db.CategoryGroup);
+db.CategoryGroup.hasMany(db.Category,{foreignKey:'parentId',targetKey:'id'});
+db.Category.belongsTo(db.CategoryGroup,{foreignKey:'parentId',targetKey:'id'});
 
 db.CategoryGroup.belongsTo(db.CategoryGroup,{
     as:'parent',
-    foreignKey: 'parentId',
+    foreignKey: 'parentId', 
     targetKey:'id',
 }); 
 db.CategoryGroup.hasMany(db.CategoryGroup,{

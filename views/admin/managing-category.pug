@@ -16,11 +16,11 @@
                                         line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
                                         line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
                                     span 그룹 추가
-                                button#delete-group.btn.btn-outline-primary.btn-sm.ml-2
-                                    svg(width="15" height="15")
-                                        //- line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
-                                        line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
-                                    span 그룹 삭제
+                                //- button#delete-group.btn.btn-outline-primary.btn-sm.ml-2
+                                //-     svg(width="15" height="15")
+                                //-         //- line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
+                                //-         line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
+                                //-     span 그룹 삭제
                                 button#create-category.btn.btn-outline-primary.btn-sm.ml-2
                                     svg(width="15" height="15")
                                         line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
@@ -30,7 +30,7 @@
                                     svg(width="15" height="15")
                                         //- line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
                                         line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
-                                    span 카데고리 삭제
+                                    span 삭제
                             hr
                         form#edit-category.form-group
                             label 이름
@@ -199,12 +199,36 @@
             };
             xhr.send();
         });
+        
+        //카데고리/그룹 삭제
+        var btnDeleteGroup = document.getElementById('delete-category');
+        btnDeleteGroup.addEventListener('click',(e)=> {
+            e.preventDefault();
+            var targetItem = document.querySelector('#category-tree li.active');
+            var value = targetItem.getAttribute('value');
+            const [type, id] = value.split(':');
+            var formData = new FormData();
+            formData.append('id',id);
+            formData.append('type',type);
+            var xhr = new XMLHttpRequest();
+            xhr.open('DELETE','/admin/category/delete');
+            xhr.onload= (e) => {
+                var categoryTreeElement = document.querySelector('#category-tree ul');
+                var categoryTreeContent = JSON.parse(xhr.response);
+                var categoryGroups = categoryTreeContent.categoryGroups;
+                var categories = categoryTreeContent.categories;
+                //Make Tree Structure                
+                var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);                
+                updateCategoryTree(categoryTreeElement,treeStructure);;
+            };
+            xhr.send(formData);
+        })
         //그룹 생성
         var btnCreateGroup = document.getElementById('create-group');
         btnCreateGroup.addEventListener('click',(e)=> {
             e.preventDefault();
             var targetItem = document.querySelector('#category-tree li.active');
-            var value = targetItem.getAttribute('value');
+            var value = (targetItem)? targetItem.getAttribute('value') : 'root:null';
             const [type, id] = value.split(':');
             var formData = new FormData();            
             if(type==='group')            
@@ -229,7 +253,7 @@
         btnCreateCategory.addEventListener('click',(e)=> { 
             e.preventDefault();
             var targetItem = document.querySelector('#category-tree li.active');
-            var value = targetItem.getAttribute('value');
+            var value = (targetItem)? targetItem.getAttribute('value') : 'root:null';
             const [type, id] = value.split(':');
             var formData = new FormData();
             if(type==='group')            

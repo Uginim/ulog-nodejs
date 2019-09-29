@@ -53,7 +53,9 @@ router.get('/categories',isAdmin,async (req, res)=>{
     res.json(json);
 });
 router.post('/category/create',isAdmin,multipartMiddleware,async (req, res)=>{
-    const {parentId}=req.body;
+    let { parentId } = req.body;
+    parentId = parseInt(parentId);
+    parentId = isNaN(parentId) ? null : parentId;
     await Category.create({
         name:'새 카데고리',
         parentId,
@@ -76,11 +78,27 @@ router.post('/category/create',isAdmin,multipartMiddleware,async (req, res)=>{
     // });
     // 
 });
+router.delete('/category/delete',isAdmin,multipartMiddleware,async (req, res)=>{
+    const {id, type}=req.body;
+    await Category.update({parentId:null},{where:{parentId:id}});
+    await CategoryGroup.update({parentId:null},{where:{parentId:id}});
+    console.log('type:',type,' id:', id);
+    if(type==='category'){
+        await Category.destroy({where:{id}});
+    } else if(type==='group'){
+        await CategoryGroup.destroy({where:{id}});
+    }
+    const json = await getAllCategoryItem();
+    res.json(json);
+});
 router.post('/categorygroup/create',isAdmin,multipartMiddleware,async (req, res)=>{
-
+    let { parentId } = req.body;
+    parentId = parseInt(parentId);
+    parentId = isNaN(parentId) ? null : parentId;
+    
     await CategoryGroup.create({
         name:'새 그룹',
-        parentId:req.body.parentId,
+        parentId,
     });
     const json = await getAllCategoryItem();
     res.json(json);
@@ -98,8 +116,8 @@ router.put('/update/category',isAdmin,multipartMiddleware,async (req, res)=>{
         }});        
         await CategoryGroup.update({name:req.body.name},{where:{id:req.body.id}});
     }
-    
-    res.json(getAllCategoryItem());
+    const json = await getAllCategoryItem();
+    res.json(json);
 });
 
 // router.get('/aboutmeEdit')

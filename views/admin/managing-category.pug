@@ -193,8 +193,7 @@
             // Set Data when a drag starts // 드래그 시작 
             Array.prototype.forEach.call(allListItems,(li)=>{ 
                 li.addEventListener('dragstart',(e)=>{      
-                    var value = e.currentTarget.getAttribute('value');
-                    console.log('dragstart',value);
+                    var value = e.currentTarget.getAttribute('value');                    
                     e.dataTransfer.setData("value",value); 
                     e.stopPropagation();
                 });
@@ -215,8 +214,7 @@
                     var srcStr = e.dataTransfer.getData("value");  
                     var srcDatas = srcStr.split(':');
                     var srcType = srcDatas[0], srcId = parseInt(srcDatas[1]);
-                    var formData = new FormData();
-                    console.log('drop from',srcStr,'to',destStr);
+                    var formData = new FormData();                    
                     if(destType==='group' || destType ==='root') {
                         formData.append('childType',srcType);
                         formData.append('childId',srcId);
@@ -234,11 +232,21 @@
             });
         }
         var updateCategoryTreeWithJson = (json) => {
-            var categoryTreeElement = document.querySelector('#category-tree ul');            
+            var categoryTreeElement = document.querySelector('#category-tree ul');   
+            var previousElement = categoryTreeElement.cloneNode(true); // Input true for copying with children.
             const {categoryGroups, categories}= json;
-            //Make Tree Structure                
-            var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);                
+            // Make Tree Structure                
+            var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);            
             updateElementsOfTree(categoryTreeElement,treeStructure);
+            // Keep the continuity of tree view
+            var previousInputElements = previousElement.querySelectorAll('input[type="checkbox"]');
+            Array.prototype.forEach.call(previousInputElements, (inputElement)=>{ 
+                var value = inputElement.parentNode.getAttribute('value');
+                if(!inputElement.checked){
+                    var targetInput = categoryTreeElement.querySelector(`li[value="${value}"] input`);
+                    targetInput.checked = false;
+                }
+            });
         };
 
         //카데고리 탭 클릭 

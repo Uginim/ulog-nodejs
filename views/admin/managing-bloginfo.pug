@@ -17,6 +17,9 @@
             .custom-file
                 input.custom-file-input#faviconImageInput(type="file" accept="image/*" aria-describedby="faviconInputPrepend")
                 label.custom-file-label(for="faviconImageInput") Choose file
+        .input-group.mb-3
+            img#favicon-preview(src='' style='display: none;' width='30' alt='preview')
+            input#favicon-url(type='hidden' name='url')
         
             
 

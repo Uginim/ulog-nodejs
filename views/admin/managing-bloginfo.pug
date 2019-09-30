@@ -2,18 +2,37 @@
     h4 블로그 정보
     hr
     form
-        .form-group
-            label 블로그 이름
+        .input-group.mb-4
+            .input-group-prepend
+                span.input-group-text 블로그 이름
             input.form-control(type='text')
-        .form-group
-            label 블로그 설명
+        .input-group
+            .input-group-prepend
+                span.input-group-text 블로그 설명
             textarea.form-control
         hr
-        .form-group
-            label 파비콘
+        .input-group.mb-3
+            .input-group-prepend
+                span.input-group-text#faviconInputPrepend 파비콘
+            .custom-file
+                input.custom-file-input#faviconImageInput(type="file" accept="image/*" aria-describedby="faviconInputPrepend")
+                label.custom-file-label(for="faviconImageInput") Choose file
+        
+            
+
         //- .form-group
         //-     label 블로그 이미지
         hr
         .form-group
-        button(class='btn mt-3 btn-lg btn-primary btn-block' type='submit') 저장
+            button(class='btn mt-3 btn-lg btn-primary btn-block' type='submit') 저장
+        script.
+            var fileInputs = document.querySelectorAll('.custom-file-input');
+            Array.prototype.forEach.call(fileInputs,(input)=>{
+                input.addEventListener('change',(event)=>{                    
+                    var target = document.querySelector(`label.custom-file-label[for="${event.currentTarget.id}"]`);                    
+                    target.innerText = event.currentTarget.files[0  ].name;
+                });
+            });
+            
+
 

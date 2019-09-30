@@ -162,11 +162,7 @@
                     e.preventDefault();
                 });
                 
-                li.addEventListener('dblclick',(e)=>{                            
-                    //- var checkbox = e.currentTarget.querySelector('input[type="checkbox"]');
-                    //- if(checkbox)
-                    //-     checkbox.checked=!checkbox.checked;
-                    //-     e.stopPropagation();
+                li.addEventListener('dblclick',(e)=>{           
                     toggleExpanded(e.currentTarget,e,false);
                 });
             });
@@ -192,7 +188,6 @@
                         nameInput.value = treeStructure.groups[parseInt(id)].name;
                     else 
                         nameInput.disabled=true;
-                    //- console.log(value, type, id);   
                 });
             });
             // Set Data when a drag starts // 드래그 시작 
@@ -206,10 +201,7 @@
             });
             //dragOver
             Array.prototype.forEach.call(allListItems,(li)=>{ 
-                li.addEventListener('dragover',(e)=>{                    
-                    //- var value = e.currentTarget.getAttribute('value');
-                    //- var datas = value.split(':');
-                    //- var type = datas[0], id = parseInt(datas[1]);
+                li.addEventListener('dragover',(e)=>{                   
                     expandItem(e.currentTarget,e,false);
                     e.preventDefault();// for catching "drop" event 
                 });

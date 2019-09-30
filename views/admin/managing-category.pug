@@ -122,6 +122,20 @@
             }
             return newElement;
         };
+        var toggleExpanded = (target,event,propagation) => {
+            var checkbox = target.querySelector('input[type="checkbox"]');
+                if(checkbox)
+                    checkbox.checked=!checkbox.checked;
+            if(event && propagation === false )
+                event.stopPropagation();
+        }
+        var expandItem = (target,event,propagation) => {
+            var checkbox = target.querySelector('input[type="checkbox"]');
+                if(checkbox)
+                    checkbox.checked=false;
+            if(event && propagation === false )
+                event.stopPropagation();
+        }
         var updateElementsOfTree = (categoryTreeElement,treeStructure) => {
             categoryTreeElement.innerHTML=""; 
             var appandTreeChildren = function appandTreeChildren(curNode,parentElement){
@@ -149,11 +163,11 @@
                 });
                 
                 li.addEventListener('dblclick',(e)=>{                            
-                    var checkbox= e.currentTarget.querySelector('input[type="checkbox"]');
-                    if(checkbox)
-                        checkbox.checked=!checkbox.checked;
-                        e.stopPropagation();
-                    
+                    //- var checkbox = e.currentTarget.querySelector('input[type="checkbox"]');
+                    //- if(checkbox)
+                    //-     checkbox.checked=!checkbox.checked;
+                    //-     e.stopPropagation();
+                    toggleExpanded(e.currentTarget,e,false);
                 });
             });
             
@@ -190,18 +204,19 @@
                     e.stopPropagation();
                 });
             });
+            //dragOver
             Array.prototype.forEach.call(allListItems,(li)=>{ 
-                li.addEventListener('dragover',(e)=>{
-                    
-                    var value = e.currentTarget.getAttribute('value');
-                    var datas = value.split(':');
-                    var type = datas[0], id = parseInt(datas[1]);
-                    e.preventDefault();
+                li.addEventListener('dragover',(e)=>{                    
+                    //- var value = e.currentTarget.getAttribute('value');
+                    //- var datas = value.split(':');
+                    //- var type = datas[0], id = parseInt(datas[1]);
+                    expandItem(e.currentTarget,e,false);
+                    e.preventDefault();// for catching "drop" event 
                 });
             });
             Array.prototype.forEach.call(allListItems,(li)=>{ 
                 li.addEventListener('drop',(e)=>{                   
-                    console.log('drop',e.dataTransfer.getData('value'));
+                    
                     var destStr = e.currentTarget.getAttribute('value');
                     var destDatas = destStr.split(':');
                     var destType = destDatas[0], destId = parseInt(destDatas[1]);
@@ -209,8 +224,8 @@
                     var srcDatas = srcStr.split(':');
                     var srcType = srcDatas[0], srcId = parseInt(srcDatas[1]);
                     var formData = new FormData();
-                    
-                    if(destType==='group') {
+                    console.log('drop from',srcStr,'to',destStr);
+                    if(destType==='group' || destType ==='root') {
                         formData.append('childType',srcType);
                         formData.append('childId',srcId);
                         formData.append('newParentType',destType);
@@ -222,6 +237,7 @@
                         };
                         xhr.send(formData);
                     }
+                    e.stopPropagation();
                 });
             });
         }

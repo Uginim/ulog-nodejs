@@ -124,7 +124,8 @@ router.put('/move/category',isAdmin,multipartMiddleware,async (req, res)=>{
         childId = isNaN(childId)?  null : parseInt(childId);
     if(typeof newParentId === 'string')
         newParentId = isNaN(newParentId)?  null : parseInt(newParentId);
-    if(newParentType ==='group'){
+    console.log('request body',childId,childType,newParentId,newParentType);
+    if(newParentType ==='group' || newParentType ==='root'){
         console.log(childType,childId,newParentType,newParentId);
         if(childType==='category'){
             await Category.update({parentId:newParentId},{where:{id:childId}});

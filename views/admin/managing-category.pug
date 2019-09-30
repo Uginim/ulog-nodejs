@@ -122,7 +122,7 @@
             }
             return newElement;
         };
-        var updateCategoryTree = (categoryTreeElement,treeStructure) => {
+        var updateElementsOfTree = (categoryTreeElement,treeStructure) => {
             categoryTreeElement.innerHTML=""; 
             var appandTreeChildren = function appandTreeChildren(curNode,parentElement){
                 var newElement = makeTreeElementFromNode(curNode);
@@ -183,31 +183,24 @@
             });
             // Set Data when a drag starts // 드래그 시작 
             Array.prototype.forEach.call(allListItems,(li)=>{ 
-                li.addEventListener('dragstart',(e)=>{        
-                    //- console.log(e);            
-                    //- e.preventDefault();
+                li.addEventListener('dragstart',(e)=>{      
                     var value = e.currentTarget.getAttribute('value');
                     console.log('dragstart',value);
-                    //- const [type, id] = value.split(':');
                     e.dataTransfer.setData("value",value); 
-                    //- e.cancelBubble = true;
                     e.stopPropagation();
                 });
             });
             Array.prototype.forEach.call(allListItems,(li)=>{ 
                 li.addEventListener('dragover',(e)=>{
-                    //- e.preventDefault();
                     
                     var value = e.currentTarget.getAttribute('value');
-                    //- console.log('dragover',value);
                     var datas = value.split(':');
                     var type = datas[0], id = parseInt(datas[1]);
                     e.preventDefault();
                 });
             });
             Array.prototype.forEach.call(allListItems,(li)=>{ 
-                li.addEventListener('drop',(e)=>{                    
-                    //- e.preventDefault();
+                li.addEventListener('drop',(e)=>{                   
                     console.log('drop',e.dataTransfer.getData('value'));
                     var destStr = e.currentTarget.getAttribute('value');
                     var destDatas = destStr.split(':');
@@ -225,34 +218,27 @@
                         var xhr = new XMLHttpRequest();
                         xhr.open('PUT','/admin/move/category');
                         xhr.onload = ()=> {
-                            var categoryTreeElement = document.querySelector('#category-tree ul');
-                            var categoryTreeContent = JSON.parse(xhr.response);
-                            var categoryGroups = categoryTreeContent.categoryGroups;
-                            var categories = categoryTreeContent.categories;
-                            //Make Tree Structure                
-                            var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);                
-                            updateCategoryTree(categoryTreeElement,treeStructure);;
+                            updateCategoryTreeWithJson(JSON.parse(xhr.response));
                         };
                         xhr.send(formData);
                     }
                 });
             });
         }
+        var updateCategoryTreeWithJson = (json) => {
+            var categoryTreeElement = document.querySelector('#category-tree ul');            
+            const {categoryGroups, categories}= json;
+            //Make Tree Structure                
+            var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);                
+            updateElementsOfTree(categoryTreeElement,treeStructure);
+        };
+
         //카데고리 탭 클릭 
         categoriesTab.addEventListener('click',e=>{
             var xhr = new XMLHttpRequest();
             xhr.open('GET','/admin/categories');
             xhr.onload = () => {
-                //- var categoryTreeElement = document.getElementById('category-tree');
-                var categoryTreeElement = document.querySelector('#category-tree ul');
-                var categoryTreeContent = JSON.parse(xhr.response);
-                var categoryGroups = categoryTreeContent.categoryGroups;
-                var categories = categoryTreeContent.categories;
-                //Make Tree Structure                
-                var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);
-                //- console.dir(treeStructure);
-                updateCategoryTree(categoryTreeElement,treeStructure); 
-                
+                updateCategoryTreeWithJson(JSON.parse(xhr.response));
             };
             xhr.send();
         });
@@ -271,13 +257,7 @@
             var xhr = new XMLHttpRequest();
             xhr.open('DELETE','/admin/category/delete');
             xhr.onload= (e) => {
-                var categoryTreeElement = document.querySelector('#category-tree ul');
-                var categoryTreeContent = JSON.parse(xhr.response);
-                var categoryGroups = categoryTreeContent.categoryGroups;
-                var categories = categoryTreeContent.categories;
-                //Make Tree Structure                
-                var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);                
-                updateCategoryTree(categoryTreeElement,treeStructure);;
+                updateCategoryTreeWithJson(JSON.parse(xhr.response));
             };
             xhr.send(formData);
         })
@@ -296,13 +276,7 @@
             var xhr = new XMLHttpRequest();
             xhr.open('POST','/admin/categorygroup/create');
             xhr.onload = () => {
-                var categoryTreeElement = document.querySelector('#category-tree ul');
-                var categoryTreeContent = JSON.parse(xhr.response);
-                var categoryGroups = categoryTreeContent.categoryGroups;
-                var categories = categoryTreeContent.categories;
-                //Make Tree Structure                
-                var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);                
-                updateCategoryTree(categoryTreeElement,treeStructure);
+                updateCategoryTreeWithJson(JSON.parse(xhr.response));
             };
             xhr.send(formData);
         });
@@ -321,13 +295,7 @@
             var xhr = new XMLHttpRequest();
             xhr.open('POST','/admin/category/create');
             xhr.onload = (e) => {
-                var categoryTreeElement = document.querySelector('#category-tree ul');
-                var categoryTreeContent = JSON.parse(xhr.response);
-                var categoryGroups = categoryTreeContent.categoryGroups;
-                var categories = categoryTreeContent.categories;
-                //Make Tree Structure                
-                var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);                
-                updateCategoryTree(categoryTreeElement,treeStructure);;
+                updateCategoryTreeWithJson(JSON.parse(xhr.response));
             };
             xhr.send(formData);
         });
@@ -346,13 +314,7 @@
             var xhr = new XMLHttpRequest();
             xhr.open('PUT','/admin/update/category');
             xhr.onload = (e) => {
-                var categoryTreeElement = document.querySelector('#category-tree ul');
-                var categoryTreeContent = JSON.parse(xhr.response);
-                var categoryGroups = categoryTreeContent.categoryGroups;
-                var categories = categoryTreeContent.categories;
-                //Make Tree Structure                
-                var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);                
-                updateCategoryTree(categoryTreeElement,treeStructure);
+                updateCategoryTreeWithJson(JSON.parse(xhr.response));
             };
             xhr.send(formData);
         });

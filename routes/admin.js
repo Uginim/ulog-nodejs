@@ -111,14 +111,29 @@ router.put('/update/category',isAdmin,multipartMiddleware,async (req, res)=>{
         await Category.update({name:req.body.name},{where:{id:req.body.id}});
     }
     else if(req.body.type==='group'){
-        let categoryGroup = await CategoryGroup.findOne({where:{
-            id:req.body.id,
-        }});        
+             
         await CategoryGroup.update({name:req.body.name},{where:{id:req.body.id}});
     }
     const json = await getAllCategoryItem();
     res.json(json);
 });
-
+router.put('/move/category',isAdmin,multipartMiddleware,async (req, res)=>{
+    const {childType, newParentType} = req.body;
+    let {childId, newParentId } = req.body;
+    if(typeof childId == 'string')
+        childId = isNaN(childId)?  null : parseInt(childId);
+    if(typeof newParentId === 'string')
+        newParentId = isNaN(newParentId)?  null : parseInt(newParentId);
+    if(newParentType ==='group'){
+        console.log(childType,childId,newParentType,newParentId);
+        if(childType==='category'){
+            await Category.update({parentId:newParentId},{where:{id:childId}});
+        } else if(childType==='group'){
+            await CategoryGroup.update({parentId:newParentId},{where:{id:childId}});
+        }
+    }
+    const json = await getAllCategoryItem();
+    res.json(json);
+})
 // router.get('/aboutmeEdit')
 module.exports = router; 

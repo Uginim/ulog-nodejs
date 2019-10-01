@@ -12,14 +12,20 @@
             textarea.form-control
         hr
         .input-group.mb-3
-            .input-group-prepend
-                span.input-group-text#faviconInputPrepend 파비콘
-            .custom-file
-                input.custom-file-input#faviconImageInput(type="file" accept="image/*" aria-describedby="faviconInputPrepend")
-                label.custom-file-label(for="faviconImageInput") Choose file
-        .input-group.mb-3
-            img#favicon-preview(src='' style='display: none;' width='30' alt='preview')
-            input#favicon-url(type='hidden' name='url')
+            .col
+                label Favicon
+                img#favicon-preview.round-float-left.m-2(src='/favicon.ico' width='30' alt='preview')
+            .col
+                input.custom-file-input#faviconImageInput(type="file" accept="image/*.ico" style="display:none" )
+                label.btn.btn-light.mx-1(type="button" for="faviconImageInput" style="float:right") 불러오기
+                label#delete-favicon.btn.btn-light.mx-1(type="button" style="float:right") 삭제
+        //- .input-group.mb-3
+        //-     .input-group-prepend
+        //-         span.input-group-text#faviconInputPrepend 파비콘
+        //-     .custom-file
+        //-         input.custom-file-input#faviconImageInput(type="file" accept="image/*" aria-describedby="faviconInputPrepend")
+        //-         label.custom-file-label(for="faviconImageInput") Choose file
+        
         
             
 
@@ -29,13 +35,23 @@
         .form-group
             button(class='btn mt-3 btn-lg btn-primary btn-block' type='submit') 저장
         script.
-            var fileInputs = document.querySelectorAll('.custom-file-input');
-            Array.prototype.forEach.call(fileInputs,(input)=>{
-                input.addEventListener('change',(event)=>{                    
-                    var target = document.querySelector(`label.custom-file-label[for="${event.currentTarget.id}"]`);                    
-                    target.innerText = event.currentTarget.files[0  ].name;
+            var faviconInput = document.getElementById('faviconImageInput');            
+            input.addEventListener('change',(event)=>{                
+                var xhr = new XMLHttpRequest();
+                var formData = new FormData();
+                formData.append(this.files[0]);
+                xhr.open('POST','/admin/favicon/store');
+                xhr.onload(function(event){
+                    if(xml.status === 200) {
+                        //갱신
+                    }
                 });
+                xhr.send(formData);
+                                
             });
-            
+            var button = document.getElementById('delete-favicon');            
+            button.addEventListener('click',(event)=>{
+                
+            });
 
 

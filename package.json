@@ -37,5 +37,8 @@
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6"
   },
-  "repository": "https://github.com/uginim/ulog-nodejs"
+  "repository": "https://github.com/uginim/ulog-nodejs",
+  "nodemonConfig": {
+    "ignore": ["public/javascript/utils.js", "docs/*"]
+  }
 }

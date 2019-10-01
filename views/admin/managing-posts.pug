@@ -1,0 +1,16 @@
+.container
+    a( href='/admin/posting' ) post editor
+    script.
+        var postsTab = document.querySelector('a[href="#post"]');
+        //- var postsTab = document.querySelector('a[href="#categories"]');
+        //카데고리 탭 클릭
+        
+        postsTab.addEventListener('click',e=>{
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET','/admin/categories');
+            xhr.onload = () => {
+                updateCategoryTreeWithJson(JSON.parse(xhr.response));
+            };
+            xhr.send();
+        });
+    

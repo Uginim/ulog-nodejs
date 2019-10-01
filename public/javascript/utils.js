@@ -47,4 +47,12 @@ var TabController = function () {
     }
 }
 tabController = TabController();
-tabController.initTabs()
+tabController.initTabs();
+// custom-file behavior
+var fileInputs = document.querySelectorAll('.custom-file-input');
+Array.prototype.forEach.call(fileInputs,(input)=>{
+    input.addEventListener('change',(event)=>{                    
+        var target = document.querySelector(`label.custom-file-label[for="${event.currentTarget.id}"]`);                    
+        target.innerText = event.currentTarget.files[0  ].name;
+    });
+});

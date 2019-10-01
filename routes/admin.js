@@ -135,6 +135,9 @@ router.put('/move/category',isAdmin,multipartMiddleware,async (req, res)=>{
     }
     const json = await getAllCategoryItem();
     res.json(json);
-})
+});
+router.post('/favicon/store', isAdmin, (req,res)=>{
+
+});
 // router.get('/aboutmeEdit')
 module.exports = router; 

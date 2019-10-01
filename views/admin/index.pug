@@ -18,9 +18,7 @@ block content
             #profile.tab-pane.fade(role='tabpanel' aria-labelledby='profile-tab')
                 include ./managing-profile.pug
             #posts.tab-pane.fade(role='tabpanel' aria-labelledby='posts-tab')
-                .container
-                    a( href='/admin/posting' ) post editor  
-                    div posts
+                include ./managing-posts.pug
             #categories.tab-pane.fade(role='tabpanel' aria-labelledby='categories-tab')
                 include ./managing-category.pug
     script.

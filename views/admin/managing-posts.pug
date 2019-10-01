@@ -7,9 +7,8 @@
         
         postsTab.addEventListener('click',e=>{
             var xhr = new XMLHttpRequest();
-            xhr.open('GET','/admin/categories');
+            xhr.open('GET','/admin/allpost');
             xhr.onload = () => {
-                updateCategoryTreeWithJson(JSON.parse(xhr.response));
             };
             xhr.send();
         });

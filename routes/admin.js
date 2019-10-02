@@ -139,5 +139,10 @@ router.put('/move/category',isAdmin,multipartMiddleware,async (req, res)=>{
 router.post('/favicon/store', isAdmin, (req,res)=>{
 
 });
+router.get('/posts/allposts', isAdmin, async (req,res) => {
+    const posts = await Post.findAll();
+    res.json(posts);
+});
+
 // router.get('/aboutmeEdit')
 module.exports = router; 

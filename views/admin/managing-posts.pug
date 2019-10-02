@@ -7,8 +7,9 @@
         
         postsTab.addEventListener('click',e=>{
             var xhr = new XMLHttpRequest();
-            xhr.open('GET','/admin/allpost');
+            xhr.open('GET','/admin/posts/allposts');
             xhr.onload = () => {
+                console.log('json',JSON.parse(xhr.response));
             };
             xhr.send();
         });

@@ -25,33 +25,12 @@
         //-     .custom-file
         //-         input.custom-file-input#faviconImageInput(type="file" accept="image/*" aria-describedby="faviconInputPrepend")
         //-         label.custom-file-label(for="faviconImageInput") Choose file
-        
-        
-            
-
         //- .form-group
         //-     label 블로그 이미지
         hr
         .form-group
             button(class='btn mt-3 btn-lg btn-primary btn-block' type='submit') 저장
         script.
-            var faviconInput = document.getElementById('faviconImageInput');            
-            input.addEventListener('change',(event)=>{                
-                var xhr = new XMLHttpRequest();
-                var formData = new FormData();
-                formData.append(this.files[0]);
-                xhr.open('POST','/admin/favicon/store');
-                xhr.onload(function(event){
-                    if(xml.status === 200) {
-                        //갱신
-                    }
-                });
-                xhr.send(formData);
-                                
-            });
-            var button = document.getElementById('delete-favicon');            
-            button.addEventListener('click',(event)=>{
-                
-            });
+            
 
 

@@ -1,16 +1,27 @@
 .container
-    a( href='/admin/posting' ) post editor
+    #posts-grid.grid-view
+        .grid-header            
+            .row
+                .col
+                .col
+                    a( href='/admin/posting' ) 
+                        i 새 글 쓰기
+        .grid-body
+            .container.grid-container 지금은 새 글이 없습니다. 
+        .grid-footer
+            .row.mx-auto
+                .btn-group(role="group" aria-label="Basic example")
+                    button.btn.btn-secondary(type="button") 이전         
+                    .btn-group(role="group" aria-label="test")
+                        button.btn.btn-primary(type="button") 1
+                        button.btn.btn-primary(type="button") 2
+                        button.btn.btn-primary(type="button") 3
+                        button.btn.btn-primary(type="button") 4
+                    button.btn.btn-secondary(type="button") 다음
+                //- .input-group
+                //-     input#searching(type="text")
+                    //- label(for)
+
     script.
-        var postsTab = document.querySelector('a[href="#post"]');
-        //- var postsTab = document.querySelector('a[href="#categories"]');
-        //카데고리 탭 클릭
         
-        postsTab.addEventListener('click',e=>{
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET','/admin/posts/allposts');
-            xhr.onload = () => {
-                console.log('json',JSON.parse(xhr.response));
-            };
-            xhr.send();
-        });
-    
+

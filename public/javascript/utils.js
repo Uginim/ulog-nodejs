@@ -382,18 +382,42 @@ btnUpdate.addEventListener('click', (e)=> {
 
 /* Posts tab */
 var postsTab = document.querySelector('a[href="#posts"]');   
-var refreshGrid = function(page,numOfPages,numOfRows,gridElement) {
-    var grid = gridElement.querySelector(".grid-container");
+var PAGE_RANGE = 5;
+var buildRow = function (data) {
+    //삭제/수정
+    //제목
+    //카데고리
+    //작성날짜
+};
+var refreshGrid = function(displayedPage, numOfPages, numOfRows, gridElement, postDatas) {
+    var gridBody = gridElement.querySelector(".grid-container");    
+    var i,
+    start = ( displayedPage-1 ) * numOfRows,
+    end = displayedPage * numOfRows,
     
-    //검색
-    //이동버튼 
-}
+    // Add rows to grid body
+    for(i=start ; i< end;i++){
+        // var row = document.createElement('div');
+        var row = buildRow(data);
+        gridBody.appendChild(row);    
+    }
+    
+    // Set page numbers
+    start = displayedPage - Math.floor(PAGE_RANGE/2);
+    start = (start<1) ? 1 : start;
+    end = displayedPage + Math.floor(PAGE_RANGE/2);
+    end = (end> Math.ceil(data/numOfRows)) ? Math.ceil(data/numOfRows) : end;
+    var pageButtonGroup = gridElement.querySelector(".page-btn-group");
+    for(i=start;i<=end;i++){
+        
+    }
+};
 
 postsTab.addEventListener('click',e=>{
     var xhr = new XMLHttpRequest();
     xhr.open('GET','/admin/posts/allposts');
     xhr.onload = () => {
-
+        
         console.log('json',JSON.parse(xhr.response));
     };
     xhr.send();

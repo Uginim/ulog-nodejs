@@ -383,22 +383,26 @@ btnUpdate.addEventListener('click', (e)=> {
 /* Posts tab */
 var postsTab = document.querySelector('a[href="#posts"]');   
 var PAGE_RANGE = 5;
-var buildRow = function (data) {
+var makeRow = function (data) {
+    var div = document.createElement('div');    
+    div.innerHTML = `<span>${data.title}</span><span>${data}`;
     //삭제/수정
+
     //제목
     //카데고리
     //작성날짜
+    return dir;
 };
 var refreshGrid = function(displayedPage, numOfPages, numOfRows, gridElement, postDatas) {
     var gridBody = gridElement.querySelector(".grid-container");    
     var i,
     start = ( displayedPage-1 ) * numOfRows,
-    end = displayedPage * numOfRows,
+    end = displayedPage * numOfRows;
     
     // Add rows to grid body
     for(i=start ; i< end;i++){
         // var row = document.createElement('div');
-        var row = buildRow(data);
+        var row = makeRow(data[i]);
         gridBody.appendChild(row);    
     }
     

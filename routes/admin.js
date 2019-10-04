@@ -41,12 +41,18 @@ router.get('/', isAdmin ,(req, res, next)=>{
         user: req.user,
     });
 });
-router.get('/posting',isAdmin, (req, res) => {
-    res.render('./admin/posting-editor',{
-        title:'Writing new Post',
-        user: req.user,
-    });
-    
+router.get('/posting',isAdmin, async (req, res, next) => {
+    try{
+        const categories = await Category.findAll();
+        console.log('categories:',categories);
+        res.render('./admin/posting-editor',{
+            title:'Write a new Post',
+            user: req.user,
+            categories,
+        });
+    }catch (e) {
+        next(e);
+    }
 });
 router.get('/categories',isAdmin,async (req, res)=>{  
     const json = await getAllCategoryItem();
@@ -140,7 +146,14 @@ router.post('/favicon/store', isAdmin, (req,res)=>{
 
 });
 router.get('/posts/allposts', isAdmin, async (req,res) => {
-    const posts = await Post.findAll();
+    const posts = await Post.findAll({
+        includes:[
+            {
+                model:Category
+
+            }
+        ],
+    });
     res.json(posts);
 });
 

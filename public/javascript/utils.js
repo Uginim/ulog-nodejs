@@ -385,24 +385,35 @@ var postsTab = document.querySelector('a[href="#posts"]');
 var PAGE_RANGE = 5;
 var makeRow = function (data) {
     var div = document.createElement('div');    
-    div.innerHTML = `<span>${data.title}</span><span>${data}`;
+    div.innerHTML = `<span>${data.title}</span><span>${data.createdAt}`;
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.innerText = '수정'
+    div.appendChild(button);
+    button = document.createElement('button');
+    button.type = 'button';
+    button.innerText = '삭제'
+    div.appendChild(button);
     //삭제/수정
 
     //제목
     //카데고리
     //작성날짜
-    return dir;
+    return div;
 };
-var refreshGrid = function(displayedPage, numOfPages, numOfRows, gridElement, postDatas) {
+var refreshGrid = function(displayedPage, numOfRows, gridElement, postDatas) {
     var gridBody = gridElement.querySelector(".grid-container");    
-    var i,
+    var i, dataLength = postDatas.length;
     start = ( displayedPage-1 ) * numOfRows,
     end = displayedPage * numOfRows;
-    
+    end = end>dataLength ? dataLength : end;
+    console.log(start,end);
     // Add rows to grid body
+    gridBody.innerHTML='';
     for(i=start ; i< end;i++){
         // var row = document.createElement('div');
-        var row = makeRow(data[i]);
+        console.log('i:',i);
+        var row = makeRow(postDatas[i]);
         gridBody.appendChild(row);    
     }
     
@@ -410,19 +421,22 @@ var refreshGrid = function(displayedPage, numOfPages, numOfRows, gridElement, po
     start = displayedPage - Math.floor(PAGE_RANGE/2);
     start = (start<1) ? 1 : start;
     end = displayedPage + Math.floor(PAGE_RANGE/2);
-    end = (end> Math.ceil(data/numOfRows)) ? Math.ceil(data/numOfRows) : end;
+    end = (end> Math.ceil(postDatas.length/numOfRows)) ? Math.ceil(postDatas.length/numOfRows) : end;
     var pageButtonGroup = gridElement.querySelector(".page-btn-group");
     for(i=start;i<=end;i++){
         
     }
 };
 
+
 postsTab.addEventListener('click',e=>{
     var xhr = new XMLHttpRequest();
     xhr.open('GET','/admin/posts/allposts');
     xhr.onload = () => {
-        
         console.log('json',JSON.parse(xhr.response));
+        var postGrid = document.querySelector('#posts-grid');
+        refreshGrid(1,10,postGrid,JSON.parse(xhr.response));        
+        
     };
     xhr.send();
 });

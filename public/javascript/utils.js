@@ -385,15 +385,10 @@ var postsTab = document.querySelector('a[href="#posts"]');
 var PAGE_RANGE = 5;
 var makeRow = function (data) {
     var div = document.createElement('div');    
-    div.innerHTML = `<span>${data.title}</span><span>${data.createdAt}`;
-    var button = document.createElement('button');
-    button.type = 'button';
-    button.innerText = '수정'
-    div.appendChild(button);
-    button = document.createElement('button');
-    button.type = 'button';
-    button.innerText = '삭제'
-    div.appendChild(button);
+    // div.innerHTML = `<span>${data.title}</span><span>${data.createdAt}`;
+    div.innerHTML = '<span class="title"></span><span class="createdAt"></span><button class="btn-remove" type="button">삭제</button><button class="btn-modify" type="button">수정</button>'
+    div.querySelector('.title').innerText=data.title;
+    div.querySelector('.createdAt').innerText=data.createdAt;
     //삭제/수정
 
     //제목

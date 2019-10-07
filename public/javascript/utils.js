@@ -385,33 +385,54 @@ var postsTab = document.querySelector('a[href="#posts"]');
 var PAGE_RANGE = 5;
 var makeRow = function (data) {
     var div = document.createElement('div');    
-    // div.innerHTML = `<span>${data.title}</span><span>${data.createdAt}`;
-    div.innerHTML = '<span class="title"></span><span class="createdAt"></span><button class="btn-remove" type="button">삭제</button><button class="btn-modify" type="button">수정</button>'
+    div.innerHTML = '<span class="title"></span><span class="createdAt"></span> <span class="hidden-content"></span> <button class="btn-remove" type="button">삭제</button><button class="btn-modify" type="button">수정</button>'
     div.querySelector('.title').innerText=data.title;
     div.querySelector('.createdAt').innerText=data.createdAt;
-    //삭제/수정
-
-    //제목
-    //카데고리
-    //작성날짜
+    div.querySelector('.hidden-content').innerText=data.id;
     return div;
 };
-var refreshGrid = function(displayedPage, numOfRows, gridElement, postDatas) {
+var refreshGrid = function refreshGrid(displayedPage, numOfRows, gridElement, postDatas) {
     var gridBody = gridElement.querySelector(".grid-container");    
     var i, dataLength = postDatas.length;
     start = ( displayedPage-1 ) * numOfRows,
     end = displayedPage * numOfRows;
-    end = end>dataLength ? dataLength : end;
-    console.log(start,end);
+    end = end>dataLength ? dataLength : end;    
     // Add rows to grid body
     gridBody.innerHTML='';
-    for(i=start ; i< end;i++){
-        // var row = document.createElement('div');
-        console.log('i:',i);
+    for(i=start ; i< end;i++){        
         var row = makeRow(postDatas[i]);
         gridBody.appendChild(row);    
     }
+    var removeButtons = gridElement.querySelectorAll('.btn-remove');
+    var modifyButtons = gridElement.querySelectorAll('.btn-modify');
     
+    if(removeButtons){
+        Array.prototype.forEach.call(removeButtons,function(btn){            
+            btn.addEventListener('click',function(e){
+                var idSpan = e.currentTarget.parentNode.querySelector('.hidden-content');
+                var id = idSpan.innerText;
+                var xhr = new XMLHttpRequest();
+                xhr.open('delete','/admin/post/delete/'+id);
+                xhr.onload= function(){
+                    var postGrid = document.querySelector('#posts-grid');
+                    refreshGrid(1,10,postGrid,JSON.parse(xhr.response));              
+                };
+                xhr.send();
+
+            });
+
+        });
+    }
+    if(modifyButtons) {
+        Array.prototype.forEach.call(modifyButtons,function(btn){            
+            btn.addEventListener('click',function(e){
+                var idSpan = e.currentTarget.parentNode.querySelector('.hidden-content');
+                var id = idSpan.innerText;
+                location="/admin/posting/"+id;  
+            });
+
+        });
+    }
     // Set page numbers
     start = displayedPage - Math.floor(PAGE_RANGE/2);
     start = (start<1) ? 1 : start;

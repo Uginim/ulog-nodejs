@@ -47,13 +47,30 @@ router.get('/posting',isAdmin, async (req, res, next) => {
         console.log('categories:',categories);
         res.render('./admin/posting-editor',{
             title:'Write a new Post',
-            user: req.user,
+            user: req.user, 
             categories,
         });
     }catch (e) {
         next(e);
     }
 });
+router.get('/posting/:id',isAdmin, async (req, res, next) => {
+    try{
+        const {id} = req.params;    
+        console.log('id:',id);
+        const post = await Post.findOne({where:{id}});
+        const categories = await Category.findAll();   
+        res.render('./admin/posting-editor',{
+            title:'Write a new Post',
+            user: req.user, 
+            categories,
+        });
+    }catch (e) {
+        next(e);
+    }
+});
+
+
 router.get('/categories',isAdmin,async (req, res)=>{  
     const json = await getAllCategoryItem();
     res.json(json);
@@ -84,6 +101,20 @@ router.post('/category/create',isAdmin,multipartMiddleware,async (req, res)=>{
     // });
     // 
 });
+router.delete('/post/delete/:id',isAdmin,async (req,res)=>{
+    const {id } = req.params;
+    console.log(id);
+    await Post.destroy({where:{id}});
+    const posts = await Post.findAll({
+        includes:[
+            {
+                model:Category,
+            },
+        ],
+    });
+    res.json(posts);
+});
+
 router.delete('/category/delete',isAdmin,multipartMiddleware,async (req, res)=>{
     const {id, type}=req.body;
     await Category.update({parentId:null},{where:{parentId:id}});

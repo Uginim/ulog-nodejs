@@ -44,7 +44,7 @@ router.get('/', isAdmin ,(req, res, next)=>{
 router.get('/posting',isAdmin, async (req, res, next) => {
     try{
         const categories = await Category.findAll();
-        console.log('categories:',categories);
+        
         res.render('./admin/posting-editor',{
             title:'Write a new Post',
             user: req.user, 
@@ -57,13 +57,18 @@ router.get('/posting',isAdmin, async (req, res, next) => {
 router.get('/posting/:id',isAdmin, async (req, res, next) => {
     try{
         const {id} = req.params;    
-        console.log('id:',id);
-        const post = await Post.findOne({where:{id}});
-        const categories = await Category.findAll();   
+        
+        const {content,title,categoryId} = await Post.findOne({where:{id}});        
+        const categories = await Category.findAll();          
         res.render('./admin/posting-editor',{
             title:'Write a new Post',
             user: req.user, 
             categories,
+            id,
+            content,
+            title,
+            categoryId,
+            modification:true,   
         });
     }catch (e) {
         next(e);

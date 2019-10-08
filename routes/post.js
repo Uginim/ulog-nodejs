@@ -45,12 +45,10 @@ router.get('/:id', async (req, res, next) => {
     });
 });
 router.post('/write', (req, res, next) => {     
-    req.body.tags.match(/#[^\s]*/g);
-    // const category = Category.findOne({where:{id:req.body.id}});
+    req.body.tags.match(/#[^\s]*/g);    
     console.log("request for 'write': ",req.body.category, req.body);
     let categoryId = parseInt(req.body.category);
-    categoryId = isNaN(categoryId) ? null : categoryId;
-    console.log('categoryId:',categoryId);
+    categoryId = isNaN(categoryId) ? null : categoryId;    
     Post.create({
         content: req.body.content,
         title: req.body.title,

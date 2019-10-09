@@ -65,7 +65,7 @@ router.get('/posting/:id',isAdmin, async (req, res, next) => {
             user: req.user, 
             categories,
             id,
-            content,
+            postContent:content,
             title,
             categoryId,
             modification:true,   

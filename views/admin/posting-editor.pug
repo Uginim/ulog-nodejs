@@ -3,26 +3,29 @@ extends layout
 block content
     .container
         form#post-form.form-group(action='/post/write' method='post')
-            .input-group.hidden-content
-                input(type='text' name='id') 
             h1
+            .input-group.hidden-input
+                if id
+                    input(type='text' name='id' value=id)
+                if postContent
+                    label(for='content')                
+                    textarea.post-content.editor(name='content') #{postContent}
+                else 
+                    label(for='content')                
+                    textarea.post-content.editor(name='content')
             .input-group.my-3
-                input.form-control(type='text' name='title' placeHolder='Title')
+                if title
+                    input.form-control(type='text' name='title' placeHolder='Title' value =title)
+                else 
+                    input.form-control(type='text' name='title' placeHolder='Title')
             .input-group.mb-3
                 select(name="category")
                     option(value='root' selected) / 
-                    each category in categories
-                        if modification
-                            option(value=category.id selected) #{category.name}
-                        else 
-                            option(value=category.id) #{category.name}
-            .input-group.hidden-input
-                label(for='post-content')
-                if modification
-                    textarea.post-content.editor(name='content') #{content}
-                else
-                    textarea.post-content.editor(name='content')
-
+                    each category in categories   
+                            - if(category.id === categoryId)
+                                option(value=category.id selected) #{category.name}
+                            - else 
+                                option(value=category.id ) #{category.name}
             .input-group
                 label(for='post-content')
                 #body-section.form-control.vh-100

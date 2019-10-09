@@ -1,53 +1,4 @@
-var TabController = function () {           
-    var CLASSNAME_HIDDEN_CONTENT = 'hidden-content'; 
-    var CLASSNAME_ACTIVE = 'active';
-    var tabButtons,tabContents;
-    var removeClassName = function(element,targetName) {
-        //- console.log(element.className,typeof element.className);
-        var resultClassNames = element.className.split(' ');                
-        resultClassNames = resultClassNames.reduce( (acc,cur) => {               
-            if(cur!==targetName) {
-                acc.push(cur);
-            }
-            return acc;
-        },[]);       
-        //- console.log(resultClassNames);
-        element.className= resultClassNames.join(' ');
-    };                
-    var addClassName = function (element, inputName) {
-        element.className = element.className + ` ${inputName}`;
-    };
-    var initTabs = function () {
-        tabButtons = document.getElementsByClassName('nav-link');
-        tabContents = document.getElementsByClassName('tab-content');
-        //- Array.prototype.forEach.call(tabButtons, function (tab) { // It's compatible with Internet Explorer
-        //-     removeClassName(tab,'active');                
-        //- });
-        //- Array.prototype.forEach.call(tabContents, function (tab) {                
-        //-     addClassName(tab,CLASSNAME_HIDDEN_CONTENT);
-        //- });
-        Array.prototype.forEach.call(tabButtons, function (tab) { 
-            tab.addEventListener('click',(event)=>{                      
-                //- console.log(tab.className);    
-                //- Array.prototype.forEach.call(tabButtons, function (tab) { 
-                //-     removeClassName(tab,CLASSNAME_ACTIVE);
-                //- });                        
-                //- addClassName(tab,CLASSNAME_ACTIVE);
-                //- removeClassName(tab,CLASSNAME_HIDDEN_CONTENT)                        
-            }); 
-        });
 
-    };
-    
-    initTabs();
-    return {
-        initTabs:initTabs,
-        addClassName:addClassName,
-        removeClassName:removeClassName,
-    }
-}
-tabController = TabController();
-tabController.initTabs();
 // custom-file behavior
 var fileInputs = document.querySelectorAll('.custom-file-input');
 Array.prototype.forEach.call(fileInputs,(input)=>{
@@ -58,27 +9,7 @@ Array.prototype.forEach.call(fileInputs,(input)=>{
 });
 
 
-/* Post Editor */
-var bodySection = document.querySelector('#body-section');
-if(bodySection) {   
-    var editor = new tui.Editor({
-        el: bodySection,
-        initialEditType: 'markdown',
-        previewStyle: 'vertical',
-        height: '300px'
-    });
-    var postForm = document.getElementById('post-form');
-    var postContent = postForm.querySelector('textarea[name="content"]');
-    console.log('postContent', postContent);
-    if(postForm) {
-        postForm.addEventListener('submit',(event)=> {                    
-            postContent.innerText=editor.getHtml();
-            var form = event.target;
-            console.log('form:',form.children);
-            // event.preventDefault();
-        });
-    }    
-}
+
 
 
 
@@ -294,90 +225,103 @@ var updateCategoryTreeWithJson = (json) => {
 
 //카데고리 탭 클릭 
 var categoriesTab = document.querySelector('a[href="#categories"]');
-categoriesTab.addEventListener('click',e=>{
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET','/admin/categories');
-    xhr.onload = () => {
-        updateCategoryTreeWithJson(JSON.parse(xhr.response));
-    };
-    xhr.send();
-});
-
+if(categoriesTab) {
+    categoriesTab.addEventListener('click',e=>{
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET','/admin/categories');
+        xhr.onload = () => {
+            updateCategoryTreeWithJson(JSON.parse(xhr.response));
+        };
+        xhr.send();
+    });
+}
 
 //카데고리/그룹 삭제
 var btnDeleteGroup = document.getElementById('delete-category');
-btnDeleteGroup.addEventListener('click',(e)=> {
-    e.preventDefault();
-    var targetItem = document.querySelector('#category-tree li.active');
-    var value = targetItem.getAttribute('value');
-    const [type, id] = value.split(':');
-    var formData = new FormData();
-    formData.append('id',id);
-    formData.append('type',type);
-    var xhr = new XMLHttpRequest();
-    xhr.open('DELETE','/admin/category/delete');
-    xhr.onload= (e) => {
-        updateCategoryTreeWithJson(JSON.parse(xhr.response));
-    };
-    xhr.send(formData);
-})
+if(btnDeleteGroup) {
+    btnDeleteGroup.addEventListener('click',(e)=> {
+        e.preventDefault();
+        var targetItem = document.querySelector('#category-tree li.active');
+        var value = targetItem.getAttribute('value');
+        const [type, id] = value.split(':');
+        var formData = new FormData();
+        formData.append('id',id);
+        formData.append('type',type);
+        var xhr = new XMLHttpRequest();
+        xhr.open('DELETE','/admin/category/delete');
+        xhr.onload= (e) => {
+            updateCategoryTreeWithJson(JSON.parse(xhr.response));
+        };
+        xhr.send(formData);
+    });
+}
+
 //그룹 생성
 var btnCreateGroup = document.getElementById('create-group');
-btnCreateGroup.addEventListener('click',(e)=> {
-    e.preventDefault();
-    var targetItem = document.querySelector('#category-tree li.active');
-    var value = (targetItem)? targetItem.getAttribute('value') : 'root:null';
-    const [type, id] = value.split(':');
-    var formData = new FormData();            
-    if(type==='group')            
-        formData.append('parentId',id);
-    else 
-        formData.append('parentId','null');  
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST','/admin/categorygroup/create');
-    xhr.onload = () => {
-        updateCategoryTreeWithJson(JSON.parse(xhr.response));
-    };
-    xhr.send(formData);
-});
+if(btnCreateGroup) {
+    btnCreateGroup.addEventListener('click',(e)=> {
+        e.preventDefault();
+        var targetItem = document.querySelector('#category-tree li.active');
+        var value = (targetItem)? targetItem.getAttribute('value') : 'root:null';
+        const [type, id] = value.split(':');
+        var formData = new FormData();            
+        if(type==='group')            
+            formData.append('parentId',id);
+        else 
+            formData.append('parentId','null');  
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST','/admin/categorygroup/create');
+        xhr.onload = () => {
+            updateCategoryTreeWithJson(JSON.parse(xhr.response));
+        };
+        xhr.send(formData);
+    });
+}
+
 //카데고리 생성
 var btnCreateCategory = document.getElementById('create-category');
-btnCreateCategory.addEventListener('click',(e)=> { 
-    e.preventDefault();
-    var targetItem = document.querySelector('#category-tree li.active');
-    var value = (targetItem)? targetItem.getAttribute('value') : 'root:null';
-    const [type, id] = value.split(':');
-    var formData = new FormData();
-    if(type==='group')            
-        formData.append('parentId',id);
-    else 
-        formData.append('parentId','null');
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST','/admin/category/create');
-    xhr.onload = (e) => {
-        updateCategoryTreeWithJson(JSON.parse(xhr.response));
-    };
-    xhr.send(formData);
-});
+if(btnCreateCategory) {
+    btnCreateCategory.addEventListener('click',(e)=> { 
+        e.preventDefault();
+        var targetItem = document.querySelector('#category-tree li.active');
+        var value = (targetItem)? targetItem.getAttribute('value') : 'root:null';
+        const [type, id] = value.split(':');
+        var formData = new FormData();
+        if(type==='group')            
+            formData.append('parentId',id);
+        else 
+            formData.append('parentId','null');
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST','/admin/category/create');
+        xhr.onload = (e) => {
+            updateCategoryTreeWithJson(JSON.parse(xhr.response));
+        };
+        xhr.send(formData);
+    });
+}
+
 //수정 버튼
 var btnUpdate = document.querySelector('#edit-category button');
-btnUpdate.addEventListener('click', (e)=> {
-    var targetItem = document.querySelector('#category-tree li.active');
-    var formData = new FormData();
-    var form = document.getElementById('edit-category');
-    var name = form.querySelector('input[name="name"]').value;
-    var value = targetItem.getAttribute('value');
-    const [type, id] = value.split(':');
-    formData.append('type',type);
-    formData.append('id',id);
-    formData.append('name',name);
-    var xhr = new XMLHttpRequest();
-    xhr.open('PUT','/admin/update/category');
-    xhr.onload = (e) => {
-        updateCategoryTreeWithJson(JSON.parse(xhr.response));
-    };
-    xhr.send(formData);
-});
+if( btnUpdate) {
+    btnUpdate.addEventListener('click', (e)=> {
+        var targetItem = document.querySelector('#category-tree li.active');
+        var formData = new FormData();
+        var form = document.getElementById('edit-category');
+        var name = form.querySelector('input[name="name"]').value;
+        var value = targetItem.getAttribute('value');
+        const [type, id] = value.split(':');
+        formData.append('type',type);
+        formData.append('id',id);
+        formData.append('name',name);
+        var xhr = new XMLHttpRequest();
+        xhr.open('PUT','/admin/update/category');
+        xhr.onload = (e) => {
+            updateCategoryTreeWithJson(JSON.parse(xhr.response));
+        };
+        xhr.send(formData);
+    });
+}
+
 
 
 /* Posts tab */
@@ -443,38 +387,114 @@ var refreshGrid = function refreshGrid(displayedPage, numOfRows, gridElement, po
         
     }
 };
+if(postsTab) {
+    postsTab.addEventListener('click',e=>{
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET','/admin/posts/allposts');
+        xhr.onload = () => {
+            console.log('json',JSON.parse(xhr.response));
+            var postGrid = document.querySelector('#posts-grid');
+            refreshGrid(1,10,postGrid,JSON.parse(xhr.response));        
+            
+        };
+        xhr.send();
+    });
+}
 
 
-postsTab.addEventListener('click',e=>{
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET','/admin/posts/allposts');
-    xhr.onload = () => {
-        console.log('json',JSON.parse(xhr.response));
-        var postGrid = document.querySelector('#posts-grid');
-        refreshGrid(1,10,postGrid,JSON.parse(xhr.response));        
-        
-    };
-    xhr.send();
-});
 
 
 
 /* Bloginfo tab */
 var faviconInput = document.getElementById('faviconImageInput');            
-faviconInput.addEventListener('change',(event)=>{                
-    var xhr = new XMLHttpRequest();
-    var formData = new FormData();
-    formData.append(this.files[0]);
-    xhr.open('POST','/admin/favicon/store');
-    xhr.onload(function(event){
-        if(xml.status === 200) {
-            //갱신
-        }
+if(faviconInput) {
+    faviconInput.addEventListener('change',(event)=>{                
+        var xhr = new XMLHttpRequest();
+        var formData = new FormData();
+        formData.append(this.files[0]);
+        xhr.open('POST','/admin/favicon/store');
+        xhr.onload(function(event){
+            if(xml.status === 200) {
+                //갱신
+            }
+        });
+        xhr.send(formData);
+                        
     });
-    xhr.send(formData);
-                    
-});
+}
 var button = document.getElementById('delete-favicon');            
-button.addEventListener('click',(event)=>{
+if( button) {        
+    button.addEventListener('click',(event)=>{
+        
+    });
+}
+
+
+/* post-page */
+//- var converter = new showdown.Converter();    
+var contentBody = document.getElementById('content-body');
+if(contentBody) {
+    console.log(contentBody);
+    // var innerText = contentBody.innerHTML;
+    // contentBody.innerHTML = contentBody.innerText;
+    // contentBody.innerHTML = marked(contentBody.innerHTML);
+    var postContent =  contentBody.innerHTML;
+    contentBody.innerHTML='';
+    var editor = new tui.Editor.factory({
+        el: contentBody,
+        viewer:true,
+        initialValue:postContent
+    });
+}
+//- content.innerHTML = converter.makeHtml(content.innerHTML);
+// content.innerHTML = content.innerText;
+if( document.getElementById('comment-send') ) {
+    document.getElementById('comment-send').addEventListener('click', function (e) {                                
+        var text = document.getElementById('comment-text');
+        var formData = new FormData();
+        var commentArea = document.getElementById('comment-area');
+        //- var commentArea = document.querySelector('form>input[name="comment"]');
+        formData.append(text.name,text.value);
+        console.log('name,value',text.name, text.value);
+        console.log('form comment',formData.get(text.name));
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+            commentArea.innerHtml = "";
+            var comments = JSON.parse(xhr.responseText).comments;     
+        }        
+        xhr.open('POST','/post/#{post.id}/comment'); 
+        xhr.send(formData);  
+    });
+}
+
+/* Post Editor */
+var bodySection = document.querySelector('#body-section');
+if(bodySection) {   
     
-});
+    var postForm = document.getElementById('post-form');
+    var postContent = postForm.querySelector('textarea[name="content"]');
+    var editor = new tui.Editor({
+        el: bodySection,    
+        // initialEditType: 'wysiwyg',
+        initialEditType: 'markdown',
+        previewStyle: 'vertical',
+        height: '300px',
+        // initialValue:postContent.innerHTML
+    });
+    console.log(postContent.innerHTML);
+    // editor.setHtml(postContent.innerHTML);
+    editor.setMarkdown(postContent.innerHTML);
+    // console.log('postContent', postContent);
+    if(postForm) {
+        postForm.addEventListener('submit',(event)=> {                    
+            // postContent.innerText=editor.getHtml();//innerText로 넣으면 개행은 <br>이되어버린다.
+            postContent.innerHTML=editor.getMarkdown();
+            // postContent.innerHTML=editor.getHtml();
+            console.log(postContent);
+            console.log('markdown',editor.getMarkdown());
+            var form = event.target;
+            console.log('form:',form.children);
+            // event.preventDefault();
+        });
+    }    
+}

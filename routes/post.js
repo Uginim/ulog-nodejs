@@ -35,7 +35,7 @@ router.get('/:id', async (req, res, next) => {
         }],
 
     });    
-   
+    console.log('post content:',post.content);
     res.render('post-page',{
         title: post.title,
         content: post.content,
@@ -44,18 +44,32 @@ router.get('/:id', async (req, res, next) => {
         postId: req.param.id,
     });
 });
-router.post('/write', (req, res, next) => {     
+router.post('/write', async (req, res, next) => {     
     req.body.tags.match(/#[^\s]*/g);    
     console.log("request for 'write': ",req.body.category, req.body);
     let categoryId = parseInt(req.body.category);
-    categoryId = isNaN(categoryId) ? null : categoryId;    
-    Post.create({
-        content: req.body.content,
-        title: req.body.title,
-        summary: req.body.summary,
-        categoryId,
-    });
-    res.redirect('/');
+    categoryId = isNaN(categoryId) ? null : categoryId;
+    if(req.body.id) { //modification
+        await Post.update({
+            content: req.body.content,
+            title: req.body.title,
+            summary: req.body.summary,
+            categoryId,
+        },{
+            where:{
+                id:req.body.id,
+            }
+        })
+    }
+    else {
+        await Post.create({
+            content: req.body.content,
+            title: req.body.title,
+            summary: req.body.summary,
+            categoryId,
+        });
+    }
+    res.redirect('/admin');
 });
 router.post('/:id/comment',multipartMiddleware, async (req, res, next) => {
     const post = await Post.findOne({

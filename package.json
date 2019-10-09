@@ -26,7 +26,7 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pug": "^2.0.4",
-    "sequelize": "^5.12.2",
+    "sequelize": "^5.19.4",
     "sequelize-cli": "^5.5.1",
     "showdown": "^1.9.0",
     "winston": "^3.2.1"
@@ -39,6 +39,9 @@
   },
   "repository": "https://github.com/uginim/ulog-nodejs",
   "nodemonConfig": {
-    "ignore": ["public/javascript/*.js", "docs/*"]
+    "ignore": [
+      "public/javascript/*.js",
+      "docs/*"
+    ]
   }
 }

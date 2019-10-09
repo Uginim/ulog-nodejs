@@ -9,7 +9,7 @@ html
                     div(class='col-4 pt-1')
                         //- a(class='text-muted' href='#') Subscribe
                     div(class='col-4 text-center')
-                        a(class='blog-header-logo text-dark' href='#') Large
+                        a(class='blog-header-logo text-dark' href='#') Uginim's Blog
                     div(class='col-4 d-flex justify-content-end align-items-center')
                         a(class='text-muted' href='#')
                             svg(xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' 
@@ -27,10 +27,10 @@ html
                             a(class='btn btn-sm btn-outline-secondary' href='auth/logout' ) Sign out                        
             div(class='nav-scroller py-1 mb-2')
                 nav(class='nav d-flex justify-content-between')
-                    a(class='p-2 text-muted' href='#') Home 
+                    a(class='p-2 text-muted' href='/post') Home 
                     a(class='p-2 text-muted' href='/post') Posts
                     //- a(class='p-2 text-muted' href='#') Reviews
-                    a(class='p-2 text-muted' href='/alltags') Tags
+                    //- a(class='p-2 text-muted' href='/post') Tags
                     a(class='p-2 text-muted' href='#') About me
             block content     
         include includes/footer.pug

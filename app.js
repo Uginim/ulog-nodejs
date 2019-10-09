@@ -5,8 +5,8 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-// const helmet = require('helmet');
-// const hpp = require('hpp');
+const helmet = require('helmet');
+const hpp = require('hpp');
 const path = require('path');
 const { sequelize } = require('./models');
 
@@ -32,31 +32,40 @@ app.set('port', process.env.PORT || 8001);
 
 if (process.env.NODE_ENV === 'production') {
     app.use(morgan('combined'));
-    // app.use(helmet());
-    // app.use(hpp());
+    app.use(helmet());
+    app.use(hpp());
+    app.use(session({
+        resave: false,
+        saveUninitialized: false,
+        secret: process.env.COOKIE_SECRET, 
+        cookie: {
+            httpOnly: true,
+            secure: false,
+        },
+        store: new RedisStore({
+            host: process.env.REDIS_HOST,
+            port: process.env.REDIS_PORT,
+            pass: process.env.REDIS_PASSWORD,
+            logErrors: true,
+        })
+    }));
 } else {
     app.use(morgan('dev'));
+    app.use(session({
+        resave: false,
+        saveUninitialized: false,
+        secret: process.env.COOKIE_SECRET, 
+        cookie: {
+            httpOnly: true,
+            secure: false,
+        },
+    }));
 }
 app.use(express.static(path.join(__dirname, 'public')));
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());// 이게 있어야 req.body를 쓸 수 있음
 app.use(cookieParser( process.env.COOKIE_SECRET));
-app.use(session({
-    resave: false,
-    saveUninitialized: false,
-    secret: process.env.COOKIE_SECRET, 
-    cookie: {
-        httpOnly: true,
-        secure: false,
-    },
-    // store: new RedisStore({
-    //     host: process.env.REDIS_HOST,
-    //     port: process.env.REDIS_PORT,
-    //     pass: process.env.REDIS_PASSWORD,
-    //     logErrors: true,
-    // })
-}));
+
 app.use (flash());
 app.use(passport.initialize());
 app.use(passport.session());

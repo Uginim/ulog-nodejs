@@ -8,9 +8,19 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const hpp = require('hpp');
 const path = require('path');
+const redis = require('redis');
+require('dotenv').config();
+const RedisStore = require('connect-redis')(session);
+const redisClient = redis.createClient({
+    host:process.env.REDIS_HOST,
+    port:process.env.REDIS_PORT,
+    password:process.env.REDIS_PASSWORD 
+});
+// redisClient.on('ready',function (){ console.log("ready")});
+redisClient.on("error", function (err) {
+    console.log("Redis Error: \n" + err);
+});
 const { sequelize } = require('./models');
-
-// const RedisStore = require('')
 
 const passportConfig = require('./passport');
 const logger = require('./utils/logger');
@@ -34,6 +44,7 @@ if (process.env.NODE_ENV === 'production') {
     app.use(morgan('combined'));
     app.use(helmet());
     app.use(hpp());
+    app.use(cookieParser( process.env.COOKIE_SECRET));
     app.use(session({
         resave: false,
         saveUninitialized: false,
@@ -43,14 +54,13 @@ if (process.env.NODE_ENV === 'production') {
             secure: false,
         },
         store: new RedisStore({
-            host: process.env.REDIS_HOST,
-            port: process.env.REDIS_PORT,
-            pass: process.env.REDIS_PASSWORD,
+            client : redisClient,
             logErrors: true,
         })
     }));
 } else {
     app.use(morgan('dev'));
+    app.use(cookieParser( process.env.COOKIE_SECRET));
     app.use(session({
         resave: false,
         saveUninitialized: false,
@@ -64,7 +74,7 @@ if (process.env.NODE_ENV === 'production') {
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());// 이게 있어야 req.body를 쓸 수 있음
-app.use(cookieParser( process.env.COOKIE_SECRET));
+
 
 app.use (flash());
 app.use(passport.initialize());

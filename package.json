@@ -4,7 +4,9 @@
   "description": "Ugi's blog service.",
   "main": "app.js",
   "scripts": {
-    "test": "node init.js && nodemon app.js"
+    "test": "node init.js \n nodemon app.js",
+    "dev": "node init.js && nodemon app.js",
+    "start": "node init.js && cross-env NODE_ENV=production PORT=80 pm2 start app.js"
   },
   "keywords": [
     "blog"
@@ -16,6 +18,7 @@
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
     "connect-multiparty": "^2.2.0",
+    "connect-redis": "^4.0.3",
     "cookie-parser": "^1.4.4",
     "cross-env": "^6.0.3",
     "dotenv": "^8.0.0",
@@ -24,12 +27,14 @@
     "helmet": "^3.21.1",
     "hpp": "^0.2.2",
     "inquirer": "^7.0.0",
+    "morgan": "^1.9.1",
     "multer": "^1.4.2",
     "mysql2": "^1.6.5",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pm2": "^3.5.1",
     "pug": "^2.0.4",
+    "redis": "^2.8.0",
     "retire": "^2.0.3",
     "sequelize": "^5.19.4",
     "sequelize-cli": "^5.5.1",
@@ -37,7 +42,6 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "morgan": "^1.9.1",
     "nodemon": "^1.19.1",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6"

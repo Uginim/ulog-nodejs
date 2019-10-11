@@ -1,8 +1,9 @@
 const express = require('express');
 const multipartMiddleware = require('connect-multiparty')();
-const router = express.Router();
+
 
 const { Post, Bloginfo, Comment, Tag, User, Category } = require('../models');
+const router = express.Router();
 
 
 router.get('/', async (req, res) => {
@@ -71,6 +72,7 @@ router.post('/write', async (req, res, next) => {
     }
     res.redirect('/admin');
 });
+
 router.post('/:id/comment',multipartMiddleware, async (req, res, next) => {
     const post = await Post.findOne({
         where:{id:req.params.id},

@@ -1,11 +1,40 @@
 //관리자 페이지 전용
 const express = require('express');
-const {isAdmin, isNotAdmin} = require('./middlewares');
+const { isAdmin, isNotAdmin } = require('./middlewares');
 const multipartMiddleware = require('connect-multiparty')();
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const { Post, Bloginfo, Tag, User, Category, CategoryGroup } = require('../models');
-
-
 const router = express.Router();
+
+fs.readdir('uploads', (error) => { 
+    if (error) {
+        console.error('uploads 폴더가 없어 uploads 폴더를 생성합니다.');
+        fs.mkdirSync('uploads');
+    }
+});
+const upload = multer({
+    storage: multer.diskStorage({
+        destination: function(req, file, cb) {
+            console.log('file1:',file);
+            cb(null, 'uploads/');
+        },
+        filename: function(req, file, cb) {
+            const ext = path.extname(file.originalname);
+            console.log('file2:',file);
+            cb(null, path.basename(file.originalname, ext) + new Date().valueOf() + ext);
+        },
+    }),
+    limits: {fileSize: 5 * 1024 * 1024 },
+});
+
+router.post('/img',isAdmin,upload.single('img'),(req, res)=> {
+    console.log(req.file);
+    res.json({ url: `/img/${req.file.filename}`});
+});
+
+
 const getAllCategoryItem = async () => {
     const categoryGroups= await CategoryGroup.findAll({
         include:[
@@ -54,6 +83,8 @@ router.get('/posting',isAdmin, async (req, res, next) => {
         next(e);
     }
 });
+
+
 router.get('/posting/:id',isAdmin, async (req, res, next) => {
     try{
         const {id} = req.params;    

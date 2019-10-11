@@ -497,27 +497,39 @@ if(bodySection) {
             // event.preventDefault();
         });
     }    
+    if(document.getElementById('image-input')) {
+        document.getElementById('image-input').addEventListener('change',function(event){
+            var formData = new FormData();
+            console.log(this, this.files);
+            formData.append('img', this.files[0]);
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var url = JSON.parse(xhr.responseText).url;
+                    var imageList = document.getElementById('image-list');
+                    var newListItem = document.createElement('li');
+                    
+
+                    newListItem.addEventListener('click',function(event){
+                        var codeMirror = editor.getCodeMirror();
+                        var previousContent = editor.getMarkdown();
+                        console.log('![image]('+newListItem.innerText+')');
+                        console.log(codeMirror.getCursor());
+                        
+                        codeMirror.setValue(previousContent+'\n![image]('+newListItem.innerText+')');
+                    });
+                    newListItem.innerText=url;
+                    imageList.appendChild(newListItem);   
+                    
+                    
+                } else {
+                    console.error(xhr.responseText);
+                }
+            };
+            xhr.open('POST', '/admin/img');
+            xhr.send(formData);
+        });
+    }
     
 }
 
-if(document.getElementById('image-input')) {
-    document.getElementById('image-input').addEventListener('change',function(event){
-        var formData = new FormData();
-        console.log(this, this.files);
-        formData.append('img', this.files[0]);
-        var xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                var url = JSON.parse(xhr.responseText).url;
-                var imageList = document.getElementById('image-list');
-                var newListItem = document.createElement('li');
-                newListItem.innerText=url;
-                imageList.appendChild(newListItem);            
-            } else {
-                console.error(xhr.responseText);
-            }
-        };
-        xhr.open('POST', '/admin/img');
-        xhr.send(formData);
-    });
-}

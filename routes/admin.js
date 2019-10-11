@@ -17,12 +17,12 @@ fs.readdir('uploads', (error) => {
 const upload = multer({
     storage: multer.diskStorage({
         destination: function(req, file, cb) {
-            console.log('file1:',file);
+            // console.log('file1:',file);
             cb(null, 'uploads/');
         },
         filename: function(req, file, cb) {
             const ext = path.extname(file.originalname);
-            console.log('file2:',file);
+            // console.log('file2:',file);
             cb(null, path.basename(file.originalname, ext) + new Date().valueOf() + ext);
         },
     }),
@@ -30,7 +30,7 @@ const upload = multer({
 });
 
 router.post('/img',isAdmin,upload.single('img'),(req, res)=> {
-    console.log(req.file);
+    // console.log(req.file);
     res.json({ url: `/img/${req.file.filename}`});
 });
 

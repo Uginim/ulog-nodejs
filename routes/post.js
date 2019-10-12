@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
         }
     ]});
     res.render('post', {
-        title: 'Blog Title',
+        title: "Uginim's Blog",
         posts: posts,
         user: req.user,
        

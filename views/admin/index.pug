@@ -5,7 +5,7 @@ block content
         
         ul.nav.nav-tabs(role='tablist')
             li.nav-item
-                a#home-tab.nav-link.active(href='#home' data-toggle="tab" role='tab' aria-controls="home" aria-selected="true") 블로그 정보
+                a#bloginfo-tab.nav-link.active(href='#home' data-toggle="tab" role='tab' aria-controls="home" aria-selected="true") 블로그 정보
             li.nav-item
                 a#profile-tab.nav-link(href='#profile' data-toggle="tab" role='tab' aria-controls="profile" aria-selected="false") 내 프로필
             li.nav-item
@@ -13,7 +13,7 @@ block content
             li.nav-item
                 a#categories-tab.nav-link(href='#categories' data-toggle="tab" role='tab'  aria-controls="categories" aria-selected="false") 카데고리 관리
         .tab-content
-            #home.tab-pane.fade.show.active(role='tabpanel' aria-labelledby='home-tab')
+            #bloginfo.tab-pane.fade.show.active(role='tabpanel' aria-labelledby='home-tab')
                 include ./managing-bloginfo.pug                        
             #profile.tab-pane.fade(role='tabpanel' aria-labelledby='profile-tab')
                 include ./managing-profile.pug

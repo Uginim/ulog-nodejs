@@ -8,6 +8,9 @@ block content
             label(class='sr-only' for='inputEmail') Email address
             input#inputEmail(placeholder='email' class='form-control' type='email' name='email')        
         .input-group
+            label(class='' for='') 
+            a(href='/private-info-policy.html') 개인정보처리방침
+        .input-group
             label(class='sr-only' for='inputPassword') password
             input#inputPassword(placeholder='password' class='form-control' type='password' name='password')        
         if loginError

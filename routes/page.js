@@ -37,17 +37,28 @@ router.get('/alltags', async (req, res, next) => {
         tags: tags,
         user: req.user,
     })
-})
+});
 
 router.get('/signin', (req, res, next) => {
-    res. render('signin', {
+    res.render('signin', {
         title: 'Sign in',
+    })
+});
+
+router.get('/signuppage', (req, res, next) => {
+    res.render('signup', {
+        title: 'Sign up ',
+    })
+});
+
+router.get('/privacypolicy', (req, res, next) => {
+    res.render('privacy-policy',{
+        blogTitle:`Uginim's Blog`,
+        blogDomain:`www.uginim.com`,
+        adminEmail:`email@email.com`,
+        adminName:`ugi`,
+        phoneNumber:`phoneNumber`
     })
 })
 
-router.get('/signuppage', (req, res, next) => {
-    res. render('signup', {
-        title: 'Sign up ',
-    })
-})
 module.exports = router;

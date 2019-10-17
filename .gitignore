@@ -3,5 +3,3 @@ node_modules
 *.log
 package-lock.json
 uploads
-public/private-info-policy.html
-*.log

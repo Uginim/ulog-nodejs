@@ -391,7 +391,7 @@ if(postsTab) {
     postsTab.addEventListener('click',e=>{
         var xhr = new XMLHttpRequest();
         xhr.open('GET','/admin/posts/allposts');
-        xhr.onload = () => {
+        xhr.onload = function() {
             console.log('json',JSON.parse(xhr.response));
             var postGrid = document.querySelector('#posts-grid');
             refreshGrid(1,10,postGrid,JSON.parse(xhr.response));        
@@ -413,11 +413,11 @@ if(faviconInput) {
         var formData = new FormData();
         formData.append(this.files[0]);
         xhr.open('POST','/admin/favicon/store');
-        xhr.onload(function(event){
+        xhr.onload = function(){
             if(xml.status === 200) {
                 //갱신
             }
-        });
+        };
         xhr.send(formData);
                         
     });
@@ -427,6 +427,25 @@ if( button) {
     button.addEventListener('click',(event)=>{
         
     });
+}
+
+/* profile tab */
+
+if(document.getElementById('profile-tab')){
+    document.getElementById('profile-tab').addEventListener('click',function (event) {
+        var profileForm = document.getElementById('profile-form');
+        if(profileForm) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET','/admin/profile/init');            
+            xhr.onload = function() {
+                var data = JSON.parse(xhr.response);            
+                profileForm.querySelector('input[name="nickname"]').value=data.nickname;
+                profileForm.querySelector('input[name="email"]').value=data.email;
+            };
+            xhr.send();
+        }
+        
+    })
 }
 
 

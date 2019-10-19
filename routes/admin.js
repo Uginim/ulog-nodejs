@@ -213,16 +213,34 @@ router.post('/favicon/store', isAdmin, (req,res)=>{
 
 });
 router.get('/posts/allposts', isAdmin, async (req,res) => {
-    const posts = await Post.findAll({
-        includes:[
-            {
-                model:Category
-
-            }
-        ],
-    });
-    res.json(posts);
+    try{
+        const posts = await Post.findAll({
+            includes:[
+                {
+                    model:Category
+    
+                }
+            ],
+        });
+        res.json(posts);
+    }catch(e){
+        console.error(e);
+    }
 });
+router.get('/profile/init', isAdmin, async(req, res)=>{
+    try{
+        // Bloginfo.findOne({where:{
+
+        // }})
+        const user = await User.findOne({where:{adminPermission:true}});
+        res.json({
+            nickname:user.username,
+            email:user.email,
+        });
+    } catch(e){
+        console.error(e);
+    }
+})
 
 // router.get('/aboutmeEdit')
 module.exports = router; 

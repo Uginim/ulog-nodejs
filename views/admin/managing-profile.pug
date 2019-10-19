@@ -1,13 +1,13 @@
 .container.mt-4
     h4 내 프로필
     hr
-    form
+    form#profile-form
         .form-group
             label 닉네임
-            input.form-control(type='text')
+            input.form-control(type='text' name='nickname')
         .form-group
             label 이메일
-            input.form-control(type='email')
+            input.form-control(type='email' name='email')        
         hr
         .form-group
             label 아이콘

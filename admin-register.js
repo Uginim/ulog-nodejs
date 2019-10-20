@@ -56,18 +56,21 @@ const registerAdminPrompt = [
   ];
 
 module.exports = async () => {
-    const user = await User.findOne({where:{
-        adminPermission: true,
-    }});
-    if(!user) {
-        const {email, username, password1} = await inquirer.prompt(registerAdminPrompt);
-        const password = await bcrypt.hash(password1, parseInt(process.HASH_SALT));
-        await User.create({
-            email,
-            username,
-            password,
-            adminPermission: true, // It's important!
-        });
+    try {
+        const user = await User.findOne({where:{
+            adminPermission: true,
+        }});
+        if(!user) {
+            const {email, username, password1} = await inquirer.prompt(registerAdminPrompt);
+            const password = await bcrypt.hash(password1, parseInt(process.HASH_SALT));
+            await User.create({
+                email,
+                username,
+                password,
+                adminPermission: true, // It's important!
+            });
+        }
+    } catch (error) {
+        console.error(error);
     }
-    
 }

@@ -21,6 +21,7 @@ redisClient.on("error", function (err) {
     console.log("Redis Error: \n" + err);
 });
 const { sequelize } = require('./models');
+require('./utils/bloginfo-initializer')();
 
 const passportConfig = require('./passport');
 const logger = require('./utils/logger');

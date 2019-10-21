@@ -1,18 +1,18 @@
 .container.mt-4
     h4 블로그 정보
     hr
-    form
+    form#bloginfo-form
         .input-group.mb-4
             .input-group-prepend
                 span.input-group-text 블로그 이름
-            input.form-control(type='text')
+            input.form-control(name='name' type='text')
         .input-group
             .input-group-prepend
                 span.input-group-text 블로그 설명
-            textarea.form-control
+            textarea.form-control(name='introduction')
         .form-group
             label 관리자 전화번호
-            input.form-control(type='text' name='phone')
+            input.form-control(type='text' name='phone-number')
         hr
         .input-group.mb-3
             .col

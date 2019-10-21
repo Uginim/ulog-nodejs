@@ -15,6 +15,7 @@ db.User = require('./user')(sequelize,Sequelize);
 db.Tag = require('./tag')(sequelize, Sequelize);
 db.Category = require('./category')(sequelize, Sequelize);
 db.CategoryGroup = require('./categorygroup')(sequelize, Sequelize);
+db.Bloginfo = require('./bloginfo')(sequelize, Sequelize);
 
 db.Post.hasMany(db.Comment);
 db.Comment.belongsTo(db.Post);
@@ -47,7 +48,7 @@ db.CategoryGroup.hasMany(db.CategoryGroup,{
     },
     constraints:false,
 });
-db.Bloginfo = require('./bloginfo');
+
 
 
 module.exports=db;

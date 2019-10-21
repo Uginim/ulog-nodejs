@@ -406,6 +406,28 @@ if(postsTab) {
 
 
 /* Bloginfo tab */
+if(document.getElementById('bloginfo-tab')){
+    var initBloginfos = function () {
+        var bloginfoForm = document.getElementById('bloginfo-form');
+        if(bloginfoForm) {
+            var xhr = new XMLHttpRequest();            
+            xhr.open('GET','/admin/bloginfo');
+            xhr.onload = function() {
+                console.log(xhr.response);
+                var data = JSON.parse(xhr.response);            
+                console.log('data',data,bloginfoForm.querySelector('input[name="Introduction"]'));
+                bloginfoForm.querySelector('input[name="name"]').value=data.blogName;
+                bloginfoForm.querySelector('textarea[name="introduction"]').innerHTML=data.blogIntroduction;
+                bloginfoForm.querySelector('input[name="phone-number"]').value=data.phoneNumber;
+            };
+            xhr.send();
+        }
+    }
+    initBloginfos();
+    document.getElementById('bloginfo-tab').addEventListener('click',function (event) {
+        initBloginfos();
+    });
+}
 var faviconInput = document.getElementById('faviconImageInput');            
 if(faviconInput) {
     faviconInput.addEventListener('change',(event)=>{                
@@ -430,7 +452,6 @@ if( button) {
 }
 
 /* profile tab */
-
 if(document.getElementById('profile-tab')){
     document.getElementById('profile-tab').addEventListener('click',function (event) {
         var profileForm = document.getElementById('profile-form');
@@ -445,7 +466,8 @@ if(document.getElementById('profile-tab')){
             xhr.send();
         }
         
-    })
+    });
+    
 }
 
 

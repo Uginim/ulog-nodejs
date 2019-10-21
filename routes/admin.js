@@ -6,6 +6,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { Post, Bloginfo, Tag, User, Category, CategoryGroup } = require('../models');
+const {BLOGINFO_PROPERTIES} = require('../utils/bloginfo-initializer');
 const router = express.Router();
 
 fs.readdir('uploads', (error) => { 
@@ -290,7 +291,27 @@ router.get('/profile/init', isAdmin, async(req, res, next)=>{
         console.error(error);
         next(error);
     }
-})
+});
+router.get('/bloginfo', isAdmin, async(req, res, next) => {
+    try {
+        
+        const bloginfos = {}; 
+        for(property of BLOGINFO_PROPERTIES) {
+            const {name} =property;
+            const bloginfo = await Bloginfo.findOne({
+                where:{
+                    name
+                },
+            }); 
+            bloginfos[bloginfo.name]= bloginfo.content;
+        }
+        res.json(bloginfos);
+          
+    } catch(error) {
+        console.error(error);
+        next(error);
+    }
+});
 
 // router.get('/aboutmeEdit')
 module.exports = router; 

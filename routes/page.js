@@ -16,15 +16,14 @@ router.get('/',async (req, res, next) => {
                 ,day = post.createdAt.getDate();
             post.formatDate = `${year}-${month<10?'0':''}${month}-${day<10?'0':''}${day}`
             return post;
-        })
-        console.log('');
+        });
         res.render('post', {
             title: 'Blog Title',
             posts: posts,
             user: req.user,
         });
     } catch(error) {
-        console.error(error):
+        console.error(error);
         next(error);
     }
 });

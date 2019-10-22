@@ -312,6 +312,24 @@ router.get('/bloginfo', isAdmin, async(req, res, next) => {
         next(error);
     }
 });
-
+router.put('/bloginfo', isAdmin,multipartMiddleware, async(req, res, next) => {
+    try{
+        
+        for(property of BLOGINFO_PROPERTIES) {
+            const {name} =property;
+            const bloginfo = await Bloginfo.update({
+                content:req.body[name],
+            },{
+                where:{
+                    name,
+                },
+            }); 
+        }
+        res.status(200).send();
+    } catch(error) {
+        console.error(error);
+        next(error);
+    }
+})
 // router.get('/aboutmeEdit')
 module.exports = router; 

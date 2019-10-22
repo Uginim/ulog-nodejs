@@ -13,8 +13,7 @@ Array.prototype.forEach.call(fileInputs,(input)=>{
 
 
 
-/* Categories tab */
-        
+/* Categories tab */        
 var treeStructureMaker = (() => {
     var makeGroupNode = (group) => {
         const {id, name, parentId} =group ; 
@@ -407,8 +406,8 @@ if(postsTab) {
 
 /* Bloginfo tab */
 if(document.getElementById('bloginfo-tab')){
+    var bloginfoForm = document.getElementById('bloginfo-form');
     var initBloginfos = function () {
-        var bloginfoForm = document.getElementById('bloginfo-form');
         if(bloginfoForm) {
             var xhr = new XMLHttpRequest();            
             xhr.open('GET','/admin/bloginfo');
@@ -427,6 +426,23 @@ if(document.getElementById('bloginfo-tab')){
     document.getElementById('bloginfo-tab').addEventListener('click',function (event) {
         initBloginfos();
     });
+    var button = bloginfoForm.querySelector('button');
+    if(button){
+        button.addEventListener('click',function(event){
+            var xhr = new XMLHttpRequest();
+            var formData = new FormData();
+            formData.append('blogName',bloginfoForm.querySelector('input[name="name"]').value);
+            formData.append('blogIntroduction,',bloginfoForm.querySelector('textarea[name="introduction"]').innerHTML);
+            formData.append('phoneNumber', bloginfoForm.querySelector('input[name="phone-number"]').value);
+            xhr.onload=function(){
+                console.log(xhr.response);   
+            }
+            xhr.open('PUT','/admin/bloginfo');
+            xhr.send(formData);
+            
+        });
+    }
+    
 }
 var faviconInput = document.getElementById('faviconImageInput');            
 if(faviconInput) {

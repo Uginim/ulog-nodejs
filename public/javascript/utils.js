@@ -405,7 +405,8 @@ if(postsTab) {
 
 
 /* Bloginfo tab */
-if(document.getElementById('bloginfo-tab')){
+var bloginfoTab = document.getElementById('bloginfo-tab');
+if(bloginfoTab){
     var bloginfoForm = document.getElementById('bloginfo-form');
     var initBloginfos = function () {
         if(bloginfoForm) {
@@ -469,8 +470,8 @@ if( button) {
 
 /* profile tab */
 if(document.getElementById('profile-tab')){
+    var profileForm = document.getElementById('profile-form');
     document.getElementById('profile-tab').addEventListener('click',function (event) {
-        var profileForm = document.getElementById('profile-form');
         if(profileForm) {
             var xhr = new XMLHttpRequest();
             xhr.open('GET','/admin/profile/init');            
@@ -482,8 +483,19 @@ if(document.getElementById('profile-tab')){
             xhr.send();
         }
         
+    });    
+    var button = profileForm.querySelector('button');
+    button.addEventListener('click',function(){
+        var xhr = new  XMLHttpRequest();
+        var formData = new FormData();
+        formData.append('username', profileForm.querySelector('input[name="nickname"]').value);
+        formData.append('email',profileForm.querySelector('input[name="email"]').value);
+        xhr.open('PUT','/admin/profile');
+        xhr.onload = function(){
+            console.log(xhr.response); 
+        }
+        xhr.send(formData);
     });
-    
 }
 
 

@@ -58,14 +58,15 @@ const getAllCategoryItem = async () => {
                 'parentId',
             ],
         });
+        return {
+            categoryGroups,
+            categories,
+        };
     }
     catch(error) {
         console.error(error);
     }
-    return {
-        categoryGroups,
-        categories,
-    };
+   
 }
 
 
@@ -292,6 +293,17 @@ router.get('/profile/init', isAdmin, async(req, res, next)=>{
         next(error);
     }
 });
+router.put('/profile',isAdmin, multipartMiddleware, async(req, res,next)=>{
+    try {
+        const {email, username} = req.body;
+        User.update({email, username},{where:{adminPermission:true}})
+        res.status(200).send();
+    } catch(error){
+        console.error(error);
+        next(error);
+    }
+})
+
 router.get('/bloginfo', isAdmin, async(req, res, next) => {
     try {
         

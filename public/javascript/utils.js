@@ -424,7 +424,7 @@ if(bloginfoTab){
         }
     }
     initBloginfos();
-    document.getElementById('bloginfo-tab').addEventListener('click',function (event) {
+    bloginfoTab.addEventListener('click',function (event) {
         initBloginfos();
     });
     var button = bloginfoForm.querySelector('button');

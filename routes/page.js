@@ -2,9 +2,17 @@ const express = require('express');
 const { Post, Bloginfo, Tag, User } = require('../models');
 
 const router = express.Router();
+const getBlogTitle = async () => {
+    const bloginfo = await Bloginfo.findOne({'where':{
+        name:'blogName'
+    }});
+    return bloginfo.content;
+}
+
 
 router.get('/',async (req, res, next) => {
     try {
+        
         let posts = await Post.findAll({ include:[
             {
                 model:Tag,
@@ -18,6 +26,7 @@ router.get('/',async (req, res, next) => {
             return post;
         });
         res.render('post', {
+            blogTitle:await getBlogTitle(),
             title: 'Blog Title',
             posts: posts,
             user: req.user,
@@ -30,6 +39,7 @@ router.get('/',async (req, res, next) => {
 
 router.get('/alltags', async (req, res, next) => {
     try {
+        
         const tags = await Tag.findAll({
             include: {
                 model: Post,
@@ -38,6 +48,7 @@ router.get('/alltags', async (req, res, next) => {
             }
         });
         res.render('alltags.pug',{
+            blogTitle:await getBlogTitle(),
             title: 'Tag list',
             tags: tags,
             user: req.user,
@@ -65,7 +76,7 @@ router.get('/privacypolicy', async (req, res, next) => {
         const adminUser = await User.findOne({where:{adminPermission:'true'}});
         
         res.render('privacy-policy',{
-            blogTitle:`Uginim's Blog`,
+            blogTitle:await getBlogTitle(),
             blogDomain:`www.uginim.com`,
             adminEmail:adminUser.email,
             adminName:adminUser.username,

@@ -4,11 +4,16 @@ const multipartMiddleware = require('connect-multiparty')();
 
 const { Post, Bloginfo, Comment, Tag, User, Category } = require('../models');
 const router = express.Router();
-
+const getBlogTitle = async () => {
+    const bloginfo = await Bloginfo.findOne({'where':{
+        name:'blogName'
+    }});
+    return bloginfo.content;
+}
 
 router.get('/', async (req, res, next) => {
     try {
-        // const bloginfo = await Bloginfo.findOne({where:{name:'title'}});
+        // const bloginfo = await Bloginfo.findOne({where:{name:'title'}});       
         const posts = await Post.findAll({ 
             atributes:['id','title','summary','createdAt'],
             includes:[
@@ -17,7 +22,8 @@ router.get('/', async (req, res, next) => {
             }
         ]});
         res.render('post', {
-            title: "Uginim's Blog",
+            title: await getBlogTitle(),
+            blogTitle: await getBlogTitle(),
             posts: posts,
             user: req.user,
         
@@ -29,7 +35,7 @@ router.get('/', async (req, res, next) => {
 });
 //post하나 가져오기
 router.get('/:id', async (req, res, next) => {
-    try {
+    try {       
         const post = await Post.findOne({
             where:{id:req.params.id},
             include:[{
@@ -44,7 +50,9 @@ router.get('/:id', async (req, res, next) => {
         });    
         console.log('post content:',post.content);
         res.render('post-page',{
+            blogTitle: await getBlogTitle(),
             title: post.title,
+            blogTitle: bloginfo.content,
             content: post.content,
             post,
             user: req.user,

@@ -3,18 +3,18 @@ extends layout
 block content
     form(class='form-signup' action='/auth/join' method='post')
         h1(class='h3 mb-3 font-weight-normal') Sign up
-        .input-group
+        .input-group.mb-1
             label(class='' for='') 
             a(href='/private-info-policy.html') 개인정보처리방침
-        .input-group
+        .input-group.mb-1
             label(class='sr-only' for='inputEmail') Email address
-            input#inputEmail(class='form-control' type='email' name='email')
-        .input-group
+            input#inputEmail(class='form-control' type='email' name='email' placeholder='email')
+        .input-group.mb-1
             label(class='sr-only' for='inputUsername') username
-            input#inputUsername(class='form-control' type='text' name='username')
-        .input-group
+            input#inputUsername(class='form-control' type='text' name='username' placeholder='username') 
+        .input-group.mb-1
             label(class='sr-only' for='inputPassword') password
-            input#inputPassword(class='form-control' type='password' name='password')
+            input#inputPassword(class='form-control' type='password' name='password' placeholder='password')
         if joinError
             .error-message=joinError            
         button#join-btn.btn(class='btn btn-lg btn-primary btn-block' type='submit') Sign up

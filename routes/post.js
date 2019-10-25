@@ -52,7 +52,6 @@ router.get('/:id', async (req, res, next) => {
         res.render('post-page',{
             blogTitle: await getBlogTitle(),
             title: post.title,
-            blogTitle: bloginfo.content,
             content: post.content,
             post,
             user: req.user,

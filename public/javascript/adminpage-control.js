@@ -272,3 +272,87 @@ if( btnUpdate) {
     });
 }
 
+
+// Json으로 부터 카데고리 트리 만들기
+var updateCategoryTreeWithJson = (json) => {
+    var categoryTreeElement = document.querySelector('#category-tree ul');   
+    var previousElement = categoryTreeElement.cloneNode(true); // Input true for copying with children.
+    const {categoryGroups, categories}= json;
+    // Make Tree Structure                
+    var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);            
+    var treeController = updateElementsOfTree(categoryTreeElement,treeStructure);
+    
+    // click event 클릭시 체크 
+    registerEventCallback(treeController.allListItems,'click',function(e){
+        Array.prototype.forEach.call(categoryTreeElement.querySelectorAll('li'),(li)=>{
+            li.classList.remove('active');
+        });                           
+        e.currentTarget.classList.toggle('active'); 
+        e.stopPropagation();//input도 한번더 호출되는 듯..
+        e.preventDefault();
+    });
+
+    // click시 이름 추출
+    registerEventCallback(treeController.allListItems,'click',function(e){
+        var value = e.currentTarget.getAttribute('value');
+        const [type, id] = value.split(':');
+        var nameInput= document.querySelector('#edit-category input[name="name"]');
+        nameInput.disabled=false;
+        if(type==='category'){
+            nameInput.value = treeStructure.categories[parseInt(id)].name;
+        }                        
+        else if(type==='group')
+            nameInput.value = treeStructure.groups[parseInt(id)].name;
+        else 
+            nameInput.disabled=true;
+    });
+    //dbl click event 등록 카데고리그룹 열기/닫기 
+    registerEventCallback( treeController.allListItems,'dblclick',function(e){        
+        toggleItem(e.currentTarget,e,false);
+    });
+
+    /* drag & drop */
+    // drag start
+    registerEventCallback( treeController.allListItems,'dragstart',function(e){        
+        var value = e.currentTarget.getAttribute('value');                    
+        e.dataTransfer.setData("value",value); 
+        e.stopPropagation();
+    });
+    // drag over
+    registerEventCallback( treeController.allListItems,'dragover',function(e){        
+        expandItem(e.currentTarget,e,false);
+        e.preventDefault();// for catching "drop" event 
+    });
+    // drop event 카데고리 끌어다 넣기
+    registerEventCallback( treeController.allListItems,'drop',function(e){        
+        var destStr = e.currentTarget.getAttribute('value');
+        var destDatas = destStr.split(':');
+        var destType = destDatas[0], destId = parseInt(destDatas[1]);
+        var srcStr = e.dataTransfer.getData("value");  
+        var srcDatas = srcStr.split(':');
+        var srcType = srcDatas[0], srcId = parseInt(srcDatas[1]);
+        var formData = new FormData();                    
+        if(destType==='group' || destType ==='root') {
+            formData.append('childType',srcType);
+            formData.append('childId',srcId);
+            formData.append('newParentType',destType);
+            formData.append('newParentId',destId);
+            var xhr = new XMLHttpRequest();
+            xhr.open('PUT','/admin/move/category');
+            xhr.onload = ()=> {
+                updateCategoryTreeWithJson(JSON.parse(xhr.response));
+            };
+            xhr.send(formData);
+        }
+        e.stopPropagation();
+    });
+    // Keep the continuity of tree view
+    var previousInputElements = previousElement.querySelectorAll('input[type="checkbox"]');
+    Array.prototype.forEach.call(previousInputElements, (inputElement)=>{ 
+        var value = inputElement.parentNode.getAttribute('value');
+        if(!inputElement.checked){
+            var targetInput = categoryTreeElement.querySelector(`li[value="${value}"] input`);
+            targetInput.checked = false;
+        }
+    });
+};

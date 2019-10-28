@@ -13,8 +13,11 @@ Array.prototype.forEach.call(fileInputs,(input)=>{
 
 
 
-
+/**
+ * 트리구조만들기
+ */
 var treeStructureMaker = (() => {
+    // 카데고리 그룹노드 생성
     var makeGroupNode = (group) => {
         const {id, name, parentId} =group ; 
         return {
@@ -26,6 +29,7 @@ var treeStructureMaker = (() => {
         };
 
     };
+    // 카데고리 노드 생성
     var makeCategoryNode = (category) => {
         const {id, name, parentId } = category;
         return {
@@ -35,6 +39,7 @@ var treeStructureMaker = (() => {
             parentId,
         }
     }
+    // 트리구조를 형성
     var buildTreeStructure = (categoryGroups,categories)=>{
         var resultTreeStructure = {
             root:{
@@ -81,6 +86,7 @@ var treeStructureMaker = (() => {
         buildTreeStructure,
     }
 })();
+// tree 의 node로 부터 element 생성
 var makeTreeElementFromNode = (node) => {
     var newElement = document.createElement('li');
     newElement.setAttribute('value',node.type==='root' ? `${node.type}:${node.type}` :`${node.type}:${node.id}`);
@@ -96,13 +102,15 @@ var makeTreeElementFromNode = (node) => {
     }
     return newElement;
 };
-var toggleExpanded = (target,event,propagation) => {
+// checkbox 토글
+var toggleItem = (target,event,propagation) => {
     var checkbox = target.querySelector('input[type="checkbox"]');
         if(checkbox)
             checkbox.checked=!checkbox.checked;
     if(event && propagation === false )
         event.stopPropagation();
 }
+// 확장하기만 함
 var expandItem = (target,event,propagation) => {
     var checkbox = target.querySelector('input[type="checkbox"]');
         if(checkbox)
@@ -110,6 +118,7 @@ var expandItem = (target,event,propagation) => {
     if(event && propagation === false )
         event.stopPropagation();
 }
+
 var updateElementsOfTree = (categoryTreeElement,treeStructure) => {
     categoryTreeElement.innerHTML=""; 
     var appandTreeChildren = function appandTreeChildren(curNode,parentElement){
@@ -126,111 +135,15 @@ var updateElementsOfTree = (categoryTreeElement,treeStructure) => {
     appandTreeChildren(treeStructure.root,categoryTreeElement);
     var allListItems= categoryTreeElement.querySelectorAll('li');
     var allCheckbox= categoryTreeElement.querySelectorAll('input[type="checkbox"]');
-    Array.prototype.forEach.call(allListItems,(li)=>{
-        li.addEventListener('click',(e)=>{                   
-            Array.prototype.forEach.call(categoryTreeElement.querySelectorAll('li'),(li)=>{
-                li.classList.remove('active');
-            });                           
-            e.currentTarget.classList.toggle('active'); 
-            e.stopPropagation();//input도 한번더 호출되는 듯..
-            e.preventDefault();
-        });
-        
-        li.addEventListener('dblclick',(e)=>{           
-            // toggleExpanded(e.currentTarget,e,false);
-        });
-    });
-    
-    Array.prototype.forEach.call(allCheckbox,(input)=>{
-        input.addEventListener('click',(e)=>{                    
-            e.preventDefault();
-        });
-        
-    });                 
-    //동작하기 
-    Array.prototype.forEach.call(allListItems,(li)=>{ 
-        li.addEventListener('click',(e)=>{
-            var value = e.currentTarget.getAttribute('value');
-            const [type, id] = value.split(':');
-            var nameInput= document.querySelector('#edit-category input[name="name"]');
-            nameInput.disabled=false;
-            if(type==='category'){
-                nameInput.value = treeStructure.categories[parseInt(id)].name;
-            }                        
-            else if(type==='group')
-                nameInput.value = treeStructure.groups[parseInt(id)].name;
-            else 
-                nameInput.disabled=true;
-        });
-    });
-    // Set Data when a drag starts 
-    Array.prototype.forEach.call(allListItems,(li)=>{ 
-        li.addEventListener('dragstart',(e)=>{      
-            var value = e.currentTarget.getAttribute('value');                    
-            e.dataTransfer.setData("value",value); 
-            e.stopPropagation();
-        });
-    });
-    //dragOver
-    Array.prototype.forEach.call(allListItems,(li)=>{ 
-        li.addEventListener('dragover',(e)=>{                   
-            expandItem(e.currentTarget,e,false);
-            e.preventDefault();// for catching "drop" event 
-        });
-    });
-    Array.prototype.forEach.call(allListItems,(li)=>{ 
-        li.addEventListener('drop',(e)=>{                   
-            
-            var destStr = e.currentTarget.getAttribute('value');
-            var destDatas = destStr.split(':');
-            var destType = destDatas[0], destId = parseInt(destDatas[1]);
-            var srcStr = e.dataTransfer.getData("value");  
-            var srcDatas = srcStr.split(':');
-            var srcType = srcDatas[0], srcId = parseInt(srcDatas[1]);
-            var formData = new FormData();                    
-            if(destType==='group' || destType ==='root') {
-                formData.append('childType',srcType);
-                formData.append('childId',srcId);
-                formData.append('newParentType',destType);
-                formData.append('newParentId',destId);
-                var xhr = new XMLHttpRequest();
-                xhr.open('PUT','/admin/move/category');
-                xhr.onload = ()=> {
-                    updateCategoryTreeWithJson(JSON.parse(xhr.response));
-                };
-                xhr.send(formData);
-            }
-            e.stopPropagation();
-        });
-    });
     return {
-        addEventListenerToLis: function (eventType,listener){
-            Array.prototype.forEach.call(allListItems,function (li){
-                li.addEventListener(eventType,listener);
-            });
-        },
+        allCheckbox:allCheckbox,
+        allListItems:allListItems
     }   
 }
-
-var updateCategoryTreeWithJson = (json) => {
-    var categoryTreeElement = document.querySelector('#category-tree ul');   
-    var previousElement = categoryTreeElement.cloneNode(true); // Input true for copying with children.
-    const {categoryGroups, categories}= json;
-    // Make Tree Structure                
-    var treeStructure = treeStructureMaker.buildTreeStructure(categoryGroups,categories);            
-    var eventListenerAdder = updateElementsOfTree(categoryTreeElement,treeStructure);
-    //dbl click
-    eventListenerAdder.addEventListenerToLis('dblclick',function(e){
-        toggleExpanded(e.currentTarget,e,false);        
-    });
-    // Keep the continuity of tree view
-    var previousInputElements = previousElement.querySelectorAll('input[type="checkbox"]');
-    Array.prototype.forEach.call(previousInputElements, (inputElement)=>{ 
-        var value = inputElement.parentNode.getAttribute('value');
-        if(!inputElement.checked){
-            var targetInput = categoryTreeElement.querySelector(`li[value="${value}"] input`);
-            targetInput.checked = false;
-        }
+// 이벤트 등록
+var registerEventCallback = function(allItems,eventType,listener){
+    Array.prototype.forEach.call(allItems,function (item){
+        item.addEventListener(eventType,listener);
     });
 };
 

@@ -121,7 +121,7 @@ router.get('/posting/:id',isAdmin, async (req, res, next) => {
     }
 });
 
-
+//나중에 /categories와 통합할 것..
 router.get('/categories',isAdmin,async (req, res, next)=>{  
     try{
         const json = await getAllCategoryItem();

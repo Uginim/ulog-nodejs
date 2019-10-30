@@ -24,17 +24,12 @@ html
                             a(class='btn btn-sm btn-outline-secondary' href='/admin') Admin Page
                         if user                            
                             a(class='btn btn-sm btn-outline-secondary' href='auth/logout' ) Sign out
-        .container-fluid
-        aside
-            nav#sidemenu
-                //- li
-                //- a(class='p-2 text-muted' href='/post') Home 
-                //- a(class='p-2 text-muted' href='/post') Posts                        
-                //- //- a(class='p-2 text-muted' href='#') Reviews
-                //- //- a(class='p-2 text-muted' href='/post') Tags
-                //- a(class='p-2 text-muted' href='#') About me
+        .container-fluid            
             .row                    
                 .col-2
+                    aside
+                        nav#sidemenu
+                            ul.category-tree
                     //- div(class='nav-scroller py-1 mb-2')
                         //- nav#sidemenu(class='nav d-flex justify-content-between')
                         //- nav#sidemenu(class='nav d-flex flex-column')

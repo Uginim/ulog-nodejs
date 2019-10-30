@@ -14,7 +14,28 @@
   display: none;
 }
 
-
+.category-tree {  
+  /* height: 30rem; */
+}
+.category-tree * {
+  list-style: none;
+}
+.category-tree input[type="checkbox"].drop {
+  display: none;
+}
+.category-tree input[type="checkbox"]:checked.drop~ul { /* ~(general sibling selector) : ~ 표시 앞의 엘리먼트 이후에 존재하는 ~표시 뒤 모든 엘리먼트들을 선택함!*/
+  display: none;
+}
+.category-tree input[type="checkbox"]+label span:nth-child(1):after{
+  content:'➖';
+}
+.category-tree input[type="checkbox"]:checked+label span:nth-child(1):after{
+  content:'➕';
+}
+.category-tree li{  
+  margin-top:0.25em;
+  margin-bottom:0.25em;
+}
 
 
 

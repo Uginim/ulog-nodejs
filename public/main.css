@@ -19,6 +19,7 @@
 }
 .category-tree * {
   list-style: none;
+  margin-left:0px; padding-left:0px;
 }
 .category-tree input[type="checkbox"].drop {
   display: none;

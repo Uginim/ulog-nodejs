@@ -7,7 +7,7 @@ if(sideMenu) {
     xhr.open('GET','/categories')
     xhr.onload = function(){
         
-        var previousElement = sideMenu.cloneNode(true); // Input true for copying with children.
+        // var previousElement = sideMenu.cloneNode(true); // Input true for copying with children.
         var json= JSON.parse(xhr.response);
         var categoryGroups = json.categoryGroups;
         var categories = json.categories;
@@ -38,6 +38,7 @@ if(sideMenu) {
             },400);
             
         });
+        // navi 자동 닫히기
     }
     xhr.send();
 }

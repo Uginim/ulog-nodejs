@@ -11,6 +11,7 @@ const getBlogTitle = async () => {
 
 
 router.get('/',async (req, res, next) => {
+    console.log('\n\nprocess.env.GOOGLE_ADSENSE_DATA_AD_CLIENT:',process.env.GOOGLE_ADSENSE_DATA_AD_CLIENT);
     try {
         
         let posts = await Post.findAll({ include:[
@@ -30,6 +31,7 @@ router.get('/',async (req, res, next) => {
             title: 'Blog Title',
             posts: posts,
             user: req.user,
+            adSenseClient: process.env.GOOGLE_ADSENSE_DATA_AD_CLIENT,
         });
     } catch(error) {
         console.error(error);

@@ -30,6 +30,7 @@ router.get('/',async (req, res, next) => {
             title: 'Blog Title',
             posts: posts,
             user: req.user,
+            adSenseClient: process.env.GOOGLE_ADSENSE_DATA_AD_CLIENT,
         });
     } catch(error) {
         console.error(error);

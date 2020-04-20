@@ -1,0 +1,39 @@
+.container.mt-4
+    h4 블로그 정보
+    hr
+    form#bloginfo-form
+        .input-group.mb-4
+            .input-group-prepend
+                span.input-group-text 블로그 이름
+            input.form-control(name='name' type='text')
+        .input-group
+            .input-group-prepend
+                span.input-group-text 블로그 설명
+            textarea.form-control(name='introduction')
+        .form-group
+            label 관리자 전화번호
+            input.form-control(type='text' name='phone-number')
+        hr
+        .input-group.mb-3
+            .col
+                label Favicon
+                img#favicon-preview.round-float-left.m-2(src='/favicon.ico' width='30' alt='preview')
+            .col
+                input.custom-file-input#faviconImageInput(type="file" accept="image/*.ico" style="display:none" )
+                label.btn.btn-light.mx-1(type="button" for="faviconImageInput" style="float:right") 불러오기
+                label#delete-favicon.btn.btn-light.mx-1(type="button" style="float:right") 삭제
+        //- .input-group.mb-3
+        //-     .input-group-prepend
+        //-         span.input-group-text#faviconInputPrepend 파비콘
+        //-     .custom-file
+        //-         input.custom-file-input#faviconImageInput(type="file" accept="image/*" aria-describedby="faviconInputPrepend")
+        //-         label.custom-file-label(for="faviconImageInput") Choose file
+        //- .form-group
+        //-     label 블로그 이미지
+        hr
+        .form-group
+            button(class='btn mt-3 btn-lg btn-primary btn-block' type='button') 저장
+        script.
+            
+
+

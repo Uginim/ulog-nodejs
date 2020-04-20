@@ -9,6 +9,10 @@ const helmet = require('helmet');
 const hpp = require('hpp');
 const path = require('path');
 const redis = require('redis');
+
+const nunjucks = require('nunjucks');
+
+
 require('dotenv').config();
 const RedisStore = require('connect-redis')(session);
 const redisClient = redis.createClient({
@@ -25,22 +29,25 @@ require('./utils/bloginfo-initializer')();
 
 const passportConfig = require('./passport');
 const logger = require('./utils/logger');
-const pageRouter = require('./routes/page');
-const postRouter = require('./routes/post');
-const authRouter = require('./routes/auth');
-const adminRouter = require('./routes/admin');
+const homeRouter = require('./routes/home');
 
 
 const app = express();
 sequelize.sync();
 passportConfig(passport);
 
-// app.engine('pug', require('pug').__express)
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+
+nunjucks.configure('views',{
+    autoescape:true,
+    express:app
+});
+// app.get('/',(req,res)=>{
+//     res.render('main.html');
+// })
+
 app.set('port', process.env.PORT || 8001);
 
-
+// 릴리즈 환경
 if (process.env.NODE_ENV === 'production') {
     app.use(morgan('combined'));
     app.use(helmet());
@@ -59,7 +66,7 @@ if (process.env.NODE_ENV === 'production') {
             logErrors: true,
         })
     }));
-} else {
+} else { // 개발 환경
     app.use(morgan('dev'));
     app.use(cookieParser( process.env.COOKIE_SECRET));
     app.use(session({
@@ -78,13 +85,10 @@ app.use(bodyParser.json());// 이게 있어야 req.body를 쓸 수 있음
 app.use('/img', express.static(path.join(__dirname, 'uploads')));
 
 app.use (flash());
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
-app.use('/',pageRouter);
-app.use('/post', postRouter);
-app.use('/auth', authRouter);
-app.use('/admin', adminRouter);
+app.use('/',homeRouter);
 
 app.use((req, res, next) => {
     const err = new Error('Not Found');

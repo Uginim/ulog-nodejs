@@ -1,0 +1,36 @@
+.container.mt-4
+    h4 카데고리 관리
+    form
+        form-group            
+            .container
+                .row
+                    .col
+                        label 카데고리 목록
+                        #category-tree
+                            ul.list-group.mt-1                 
+                    .col
+                        form
+                            .my-4
+                                button#create-group.btn.btn-outline-primary.btn-sm.ml-2 
+                                    svg(width="15" height="15")
+                                        line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
+                                        line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
+                                    span 그룹 추가
+                                button#create-category.btn.btn-outline-primary.btn-sm.ml-2
+                                    svg(width="15" height="15")
+                                        line(x1="7" y1="3" x2="7" y2="12" stroke-width="2" stroke="#26b2a2")
+                                        line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
+                                    span 카데고리 추가
+                                button#delete-category.btn.btn-outline-primary.btn-sm.ml-2
+                                    svg(width="15" height="15")
+                                        line(x1="3" y1="7" x2="12" y2="7" stroke-width="2" stroke="#26b2a2")
+                                    span 삭제
+                            hr
+                        form#edit-category.form-group
+                            label 이름
+                            input.form-control(type='text' name='name' disabled="true" )
+                            button(class='btn mt-3 btn-lg btn-primary btn-block' type='button') 수정
+    hr    
+    script.
+        
+        

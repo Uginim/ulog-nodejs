@@ -1,0 +1,23 @@
+doctype
+html
+    include ../includes/head.pug
+    
+    body        
+        .container
+            header(class=' py-1 mb-2')
+                div(class='row flex-nowrap justify-content-between align-items-center')  
+                    div(class='col-4 ')
+                        //- a(class='blog-header-logo text-dark' href='#') Large              
+                        h1.py-1 블로그 관리
+                    div(class='col-4 d-flex justify-content-end align-items-center')                   
+                        if !user
+                            a(class='btn btn-sm btn-outline-secondary' href='/signin') Sign in
+                        if user && user.adminPermission
+                            a(class='btn btn-sm btn-outline-secondary mr-2' href='/') Blog Page
+                            a(class='btn btn-sm btn-outline-secondary' href='auth/logout' ) Sign out            
+            
+            block content
+        
+        script.
+            
+    include ../includes/footer.pug

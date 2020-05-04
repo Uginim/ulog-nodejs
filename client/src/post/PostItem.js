@@ -7,6 +7,7 @@ class Post extends Component{
             <div className="post-item">
                 <img className="thumbnail"/>
                 <p className="title"></p>
+                <p className="content-summary"></p>
             </div>
         );
     }

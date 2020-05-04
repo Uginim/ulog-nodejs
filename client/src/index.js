@@ -4,8 +4,12 @@ import ReactDOM from "react-dom";
 import PostList from "./post/PostList.js";
 window.addEventListener('load',
 e=>{
+    // post List 갱신
+    const postList = document.getElementById("post-list");
     if(document.getElementById("post-list")){
         ReactDOM.render(<PostList />, document.getElementById("post-list"));
+        const postListRequest = new XMLHttpRequest();
+        postListRequest.open("GET","")
     }
 
 });

@@ -44,7 +44,7 @@
   "devDependencies": {
     "nodemon": "^1.19.1",
     "webpack": "^4.39.1",
-    "webpack-cli": "^3.3.6"
+    "webpack-cli": "^3.3.12"
   },
   "repository": "https://github.com/uginim/ulog-nodejs",
   "nodemonConfig": {

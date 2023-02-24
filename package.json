@@ -36,7 +36,7 @@
     "pug": "^2.0.4",
     "redis": "^2.8.0",
     "retire": "^2.0.3",
-    "sequelize": "^5.19.4",
+    "sequelize": "^6.29.0",
     "sequelize-cli": "^5.5.1",
     "showdown": "^1.9.0",
     "winston": "^3.2.1"

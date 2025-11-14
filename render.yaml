@@ -1,0 +1,41 @@
+services:
+  # Web Service (Node.js App)
+  - type: web
+    name: ulog-blog
+    env: node
+    region: singapore  # 한국과 가까운 리전
+    plan: free  # 또는 starter ($7/월)
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 8001
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ulog-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: ulog-redis
+          property: connectionString
+
+databases:
+  # PostgreSQL (MySQL 대신 - Render는 MySQL 미지원)
+  - name: ulog-db
+    databaseName: ulog
+    plan: free  # 또는 starter ($7/월)
+    region: singapore
+    # 주의: 무료 티어는 90일 후 삭제됨!
+
+# Redis (선택사항 - 유료만 가능)
+# - type: redis
+#   name: ulog-redis
+#   plan: starter  # $7/월부터
+#   region: singapore
+#   maxmemoryPolicy: allkeys-lru

@@ -6,7 +6,9 @@
   "scripts": {
     "test": "node init.js \n nodemon app.js",
     "dev": "node init.js && nodemon app.js",
-    "start": "node init.js && cross-env NODE_ENV=production PORT=80 pm2 start app.js"
+    "start": "node app.js",
+    "start:pm2": "cross-env NODE_ENV=production PORT=80 pm2 start app.js",
+    "db:sync": "node -e \"require('./models').sequelize.sync().then(() => process.exit(0))\""
   },
   "keywords": [
     "blog"

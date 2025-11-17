@@ -1,25 +1,29 @@
 extends layout
 
-block content   
-    h1.post-title #{title}
-    - var formatter = new Intl.DateTimeFormat('ko-KR',{ year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
-    p.text-muted  #{formatter.format(post.createdAt)}
-    .post-content
-        #content-body #{content}
-    hr    
-    if(user)
-        form#form-comment(class='form-comment' acti on='/post/#{post.id}/comment' method='POST')            
-            .input-group.mb-3
-                .input-group-prepend
-                    span.input-group-text comment
-                textarea#comment-text(class='form-control' name='comment') 
-                .input-group-append           
-                    button#comment-send(class='btn btn-outline-secondary' type='button') send                    
-    #comment-area
-        each comment in post.comments
-            .comment-username #{comment.user.username}
-            .comment-createdat #{comment.createdAt}
-            div(class='comment') #{comment.content}
+block content
+    .post-detail
+        h1.post-title #{title}
+        - var formatter = new Intl.DateTimeFormat('ko-KR',{ year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+        p.text-muted.mb-4  #{formatter.format(post.createdAt)}
+        .post-content
+            #content-body #{content}
+
+    .comment-section
+        h3.mb-4 댓글
+        if(user)
+            form#form-comment.mb-4
+                .form-group
+                    textarea#comment-text.form-control(name='comment' rows='4' placeholder='댓글을 입력하세요...')
+                button#comment-send.btn.btn-primary(type='button') 댓글 작성
+        else
+            p.text-muted 댓글을 작성하려면 로그인이 필요합니다.
+
+        #comment-area
+            each comment in post.comments
+                .comment-item
+                    .comment-username #{comment.user.username}
+                    .comment-createdat #{formatter.format(comment.createdAt)}
+                    .comment-content #{comment.content}
     script.
        
 
